@@ -5,6 +5,8 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
 */
+#include <list>
+
 
 #include "GameObject.h"
 #include "Player.h"
@@ -22,6 +24,8 @@ int main(int argc, char **argv)
 	bool redraw = false;
 	int framecount =0;
 	bool key[8] = { false, false, false, false, false, false, false, false };
+
+	std::list<GameObject*> objects;
 
 	//Intitializations
 	ALLEGRO_DISPLAY *display = NULL;
@@ -65,11 +69,14 @@ int main(int argc, char **argv)
 		player[i]->set_width(32);
 		player[i]->set_height(48);
 		player[i]->set_bound(1);
+
+		objects.push_back(player[i]);
 	}
 	player[0]->setImage(player1_image);
 	player[0]->setLeft(true);
 	player[1]->setImage(player2_image);
 	player[1]->setLeft(false);
+
 
 	//Load Background
 	//background = al_load_bitmap("background.png");
@@ -133,8 +140,8 @@ int main(int argc, char **argv)
 		{
 			redraw = true;
 			
-			for (int i = 0; i < 2; i++)
-				player[i]->Update(key);
+			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
+				(*iter)->Update(key);
 
 		}
 		else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
@@ -207,8 +214,8 @@ int main(int argc, char **argv)
 			redraw = false;
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			//al_draw_bitmap_region(background, 0, 0, 800, 600, 0, 0,0);
-			for (int i = 0; i < 2; i++)
-				player[i]->Draw();
+			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
+				(*iter)->Draw();
 			al_draw_text(font_pirulen_24, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, 10, ALLEGRO_ALIGN_CENTER, "IRON MAN vs. CAPTAIN AMERICA");
 			al_flip_display();
 		}
