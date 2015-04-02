@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 	bool game_done = false;
 	bool redraw = false;
 	int framecount =0;
-	bool key[8] = { false, false, false, false, false, false, false, false };
+	bool key[5] = { false, false, false, false, false};
 
 	std::list<GameObject*> objects;
 
@@ -34,8 +34,8 @@ int main(int argc, char **argv)
 	ALLEGRO_FONT *font_pirulen_18 = NULL;
 	ALLEGRO_FONT *font_pirulen_24 = NULL;
 	ALLEGRO_FONT *font_pirulen_72 = NULL;
-	ALLEGRO_BITMAP *player1_image = NULL;
-	ALLEGRO_BITMAP *player2_image = NULL;
+	ALLEGRO_BITMAP *player_image = NULL;
+	//ALLEGRO_BITMAP *player2_image = NULL;
 	//ALLEGRO_BITMAP *background = NULL;
 
 	//Intitalize allegro
@@ -54,28 +54,24 @@ int main(int argc, char **argv)
 	al_init_image_addon();
 
 	//New Player Object
-	player1_image = al_load_bitmap("ironman.png");
-	player2_image = al_load_bitmap("captainamerica_shield.png");
+	player_image = al_load_bitmap("ironman.png");
+	//player2_image = al_load_bitmap("captainamerica_shield.png");
 
-	Player *player[2];
+	Player *player;
 
-	for (int i = 0; i < 2; i++)
-	{
-		player[i] = new Player;
-		player[i]->set_x(SCREEN_WIDTH / 4 *(2*i+1));
-		player[i]->set_y(SCREEN_HEIGHT / 2);
-		player[i]->set_x_velocity(5);
-		player[i]->set_y_velocity(5);
-		player[i]->set_width(32);
-		player[i]->set_height(48);
-		player[i]->set_bound(1);
+	player = new Player;
+	player->set_x(SCREEN_WIDTH /2);
+	player->set_y(3*SCREEN_HEIGHT / 4);
+	player->set_x_velocity(5);
+	player->set_y_velocity(5);
+	player->set_width(32);
+	player->set_height(48);
+	player->set_bound(1);
+	player->setImage(player_image);
 
-		objects.push_back(player[i]);
-	}
-	player[0]->setImage(player1_image);
-	player[0]->setLeft(false);
-	player[1]->setImage(player2_image);
-	player[1]->setLeft(true);
+	objects.push_back(player);
+
+
 
 
 	//Load Background
@@ -83,6 +79,7 @@ int main(int argc, char **argv)
 
 	//Create Display
 	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+	al_set_new_display_flags(ALLEGRO_NOFRAME);
 	display = al_create_display(SCREEN_WIDTH, SCREEN_HEIGHT);
 	if (!display)
 	{
@@ -162,18 +159,8 @@ int main(int argc, char **argv)
 				case ALLEGRO_KEY_RIGHT:
 					key[KEY_RIGHT] = true;
 					break;
-
-				case ALLEGRO_KEY_W:
-					key[KEY_W] = true;
-					break;
-				case ALLEGRO_KEY_S:
-					key[KEY_S] = true;
-					break;
-				case ALLEGRO_KEY_A:
-					key[KEY_A] = true;
-					break;
-				case ALLEGRO_KEY_D:
-					key[KEY_D] = true;
+				case ALLEGRO_KEY_SPACE:
+					key[KEY_SPACE] = true;
 					break;
 			}
 		}
@@ -193,18 +180,12 @@ int main(int argc, char **argv)
 			case ALLEGRO_KEY_RIGHT:
 				key[KEY_RIGHT] = false;
 				break;
+			case ALLEGRO_KEY_SPACE:
+				key[KEY_SPACE] = false;
+				break;
 
-			case ALLEGRO_KEY_W:
-				key[KEY_W] = false;
-				break;
-			case ALLEGRO_KEY_S:
-				key[KEY_S] = false;
-				break;
-			case ALLEGRO_KEY_A:
-				key[KEY_A] = false;
-				break;
-			case ALLEGRO_KEY_D:
-				key[KEY_D] = false;
+			case ALLEGRO_KEY_ESCAPE:
+				game_done=true;
 				break;
 			}
 		}
@@ -224,11 +205,10 @@ int main(int argc, char **argv)
 	}
 
 	//Destroy
-	for (int i = 0; i < 2; i++)
-		delete player[i];
+	delete player;
 
-	al_destroy_bitmap(player2_image);
-	al_destroy_bitmap(player1_image);
+	//al_destroy_bitmap(player2_image);
+	al_destroy_bitmap(player_image);
 	al_destroy_font(font_pirulen_72);
 	al_destroy_font(font_pirulen_24);
 	al_destroy_font(font_pirulen_18);

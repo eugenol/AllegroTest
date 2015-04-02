@@ -12,16 +12,6 @@ Player::~Player()
 
 void Player::Update(const bool *key)
 {
-	if (!left)
-	{
-		bool temp_key[4];
-		temp_key[KEY_UP] = key[KEY_W];
-		temp_key[KEY_DOWN] = key[KEY_S];
-		temp_key[KEY_LEFT] = key[KEY_A];
-		temp_key[KEY_RIGHT] = key[KEY_D];
-		GameObject::Update(temp_key);
-	}
-	else
 		GameObject::Update(key);
 }
 
