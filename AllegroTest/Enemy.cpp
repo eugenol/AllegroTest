@@ -17,8 +17,8 @@ void Enemy::Update(const bool *key)
 
 void Enemy::Draw()
 {
-	const float image_width = 32;
-	const float image_height = 48;
+	const float image_width = 40;
+	const float image_height = 56;
 	float start_image_x = 0;
 	float start_image_y = 0;
 

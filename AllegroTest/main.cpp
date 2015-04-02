@@ -10,6 +10,7 @@
 
 #include "GameObject.h"
 #include "Player.h"
+#include "Enemy.h"
 
 
 int main(int argc, char **argv)
@@ -35,7 +36,7 @@ int main(int argc, char **argv)
 	ALLEGRO_FONT *font_pirulen_24 = NULL;
 	ALLEGRO_FONT *font_pirulen_72 = NULL;
 	ALLEGRO_BITMAP *player_image = NULL;
-	//ALLEGRO_BITMAP *player2_image = NULL;
+	ALLEGRO_BITMAP *enemy_image = NULL;
 	//ALLEGRO_BITMAP *background = NULL;
 
 	//Intitalize allegro
@@ -55,9 +56,10 @@ int main(int argc, char **argv)
 
 	//New Player Object
 	player_image = al_load_bitmap("ironman.png");
-	//player2_image = al_load_bitmap("captainamerica_shield.png");
+	enemy_image = al_load_bitmap("hulk.png");
 
 	Player *player;
+	Enemy *enemy;
 
 	player = new Player;
 	player->set_x(SCREEN_WIDTH /2);
@@ -68,10 +70,18 @@ int main(int argc, char **argv)
 	player->set_height(48);
 	player->set_bound(1);
 	player->setImage(player_image);
-
 	objects.push_back(player);
 
-
+	enemy = new Enemy;
+	enemy->set_x(SCREEN_WIDTH / 2);
+	enemy->set_y(SCREEN_HEIGHT-28);
+	enemy->set_x_velocity(5);
+	enemy->set_y_velocity(5);
+	enemy->set_width(40);
+	enemy->set_height(56);
+	enemy->set_bound(1);
+	enemy->setImage(enemy_image);
+	objects.push_back(enemy);
 
 
 	//Load Background
@@ -206,8 +216,9 @@ int main(int argc, char **argv)
 
 	//Destroy
 	delete player;
+	delete enemy;
 
-	//al_destroy_bitmap(player2_image);
+	al_destroy_bitmap(enemy_image);
 	al_destroy_bitmap(player_image);
 	al_destroy_font(font_pirulen_72);
 	al_destroy_font(font_pirulen_24);
