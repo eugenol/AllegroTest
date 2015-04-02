@@ -89,6 +89,7 @@ int main(int argc, char **argv)
 			NULL, ALLEGRO_MESSAGEBOX_ERROR);
 		return -1;
 	}
+	al_set_window_title(display, "IRON MAN vs. CAPTAIN AMERICA");
 
 	//Create Timer
 	timer = al_create_timer(1.0 / FPS);

@@ -41,9 +41,10 @@ void GameObject::Update(const bool *key)
 	//bounds checking
 	if (y <= 0 + height/2+bound)
 		y = 0 + height / 2 + bound;
-
-	if (y >= SCREEN_HEIGHT - (height / 2 + bound))
-		y = SCREEN_HEIGHT - (height / 2 + bound);
+	
+	//Fixed so that their feet toughes the ground
+	if (y >= SCREEN_HEIGHT - (height / 2 -2))
+		y = SCREEN_HEIGHT - (height / 2 -2);
 
 	if (x <= 0 + width / 2 + bound)
 		x = 0 + width / 2 + bound;
