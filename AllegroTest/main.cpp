@@ -3,6 +3,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_image.h>
 */
 
 #include "GameObject.h"
@@ -27,6 +28,7 @@ int main(int argc, char **argv)
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_FONT *font_pirulen_18 = NULL;
 	ALLEGRO_FONT *font_pirulen_72 = NULL;
+	ALLEGRO_BITMAP *player_image = NULL;
 
 	//Intitalize allegro
 	if (!al_init())
@@ -41,15 +43,20 @@ int main(int argc, char **argv)
 	al_init_ttf_addon();
 	al_install_keyboard();
 	al_init_primitives_addon();
+	al_init_image_addon();
 
 	//New Player Object
-	GameObject *player;
+	player_image = al_load_bitmap("ironman.png");
+	Player *player;
 	player = new Player;
 	player->set_x(SCREEN_WIDTH / 2);
 	player->set_y(SCREEN_HEIGHT / 2);
 	player->set_x_velocity(5);
 	player->set_y_velocity(5);
-	player->set_size(8);
+	player->set_width(32);
+	player->set_height(48);
+	player->set_bound(1);
+	player->setImage(player_image);
 
 	//Create Display
 	display = al_create_display(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -166,6 +173,7 @@ int main(int argc, char **argv)
 
 	//Destroy
 	delete player;
+	al_destroy_bitmap(player_image);
 	al_destroy_font(font_pirulen_72);
 	al_destroy_font(font_pirulen_18);
 	al_destroy_event_queue(event_queue);

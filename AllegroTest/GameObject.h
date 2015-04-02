@@ -4,6 +4,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_image.h>
 
 //Consts
 const int SCREEN_WIDTH = 800;
@@ -15,9 +16,11 @@ class GameObject
 {
 	float x;
 	float y;
-	float size;
+	float height;
+	float width;
 	float velocity_x;
 	float velocity_y;
+	float bound;
 public:
 	GameObject();
 	~GameObject();
@@ -35,8 +38,14 @@ public:
 	float get_y_velocity() { return velocity_y; }
 	void set_y_velocity(float velocity_y) { GameObject::velocity_y = velocity_y; }
 
-	float get_size() { return size; }
-	void set_size(float size) { GameObject::size = size; }
+	float get_width() { return width; }
+	void set_width(float width) { GameObject::width = width; }
+
+	float get_height() { return height; }
+	void set_height(float height) { GameObject::height = height; }
+
+	float get_bound() { return bound; }
+	void set_bound(float bound) { GameObject::bound = bound; }
 
 	virtual void Update(const bool *key);
 

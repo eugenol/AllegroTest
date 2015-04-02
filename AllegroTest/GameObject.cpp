@@ -23,15 +23,15 @@ void GameObject::Update(const bool *key)
 		x += velocity_x;
 
 	//bounds checking
-	if (y <= size)
-		y = size;
+	if (y <= 0 + height/2+bound)
+		y = 0 + height / 2 + bound;
 
-	if (y >= SCREEN_HEIGHT - size)
-		y = SCREEN_HEIGHT - size;
+	if (y >= SCREEN_HEIGHT - (height / 2 + bound))
+		y = SCREEN_HEIGHT - (height / 2 + bound);
 
-	if (x <= size)
-		x=size;
+	if (x <= 0 + width / 2 + bound)
+		x = 0 + width / 2 + bound;
 
-	if (x >= SCREEN_WIDTH - size)
-		x = SCREEN_WIDTH -size;
+	if (x >= SCREEN_WIDTH - (0 + width / 2 + bound))
+		x = SCREEN_WIDTH - (0 + width / 2 + bound);
 }

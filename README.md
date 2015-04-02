@@ -10,3 +10,4 @@ make sure to set this in environment in debugging, for the debug version
 PATH=c:\allegro\bin;%PATH%
 
 if you get a font error, copy the font to the directory that the executable is in (i.e the debug or release folder)
+if you get an image error, copy the image to the directory that the executable is in (i.e the debug or release folder)
