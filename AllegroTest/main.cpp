@@ -222,9 +222,9 @@ int main(int argc, char **argv)
 	}
 
 	//Destroy
-	//al_destroy_bitmap(background);
 	for (int i = 0; i < 2; i++)
 		delete player[i];
+
 	al_destroy_bitmap(player2_image);
 	al_destroy_bitmap(player1_image);
 	al_destroy_font(font_pirulen_72);
