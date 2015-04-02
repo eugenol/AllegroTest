@@ -10,10 +10,10 @@
 int main(int argc, char **argv)
 {
 	//Consts
-	const int SCREEN_WIDTH = 800;
-	const int SCREEN_HEIGHT = 600;
-	const float FPS = 60;
-	enum KEYS{KEY_UP,KEY_DOWN,KEY_LEFT,KEY_RIGHT};
+	//const int SCREEN_WIDTH = 800;
+	//const int SCREEN_HEIGHT = 600;
+	//const float FPS = 60;
+	//enum KEYS{KEY_UP,KEY_DOWN,KEY_LEFT,KEY_RIGHT};
 
 	bool game_done = false;
 	bool redraw = false;
@@ -109,27 +109,7 @@ int main(int argc, char **argv)
 		{
 			redraw = true;
 
-			//update player position
-			if (key[KEY_UP])
-				player->set_y(player->get_y() - player->get_y_velocity());
-			if (key[KEY_DOWN])
-				player->set_y(player->get_y() + player->get_y_velocity());
-			if (key[KEY_LEFT])
-				player->set_x(player->get_x() - player->get_x_velocity());
-			if (key[KEY_RIGHT])
-				player->set_x(player->get_x() + player->get_x_velocity());
-
-			//bounds checking
-			if (player->get_y() - player->get_size() <= 0)
-				player->set_y(player->get_size());
-			if (player->get_y() + player->get_size() >= SCREEN_HEIGHT)
-				player->set_y(SCREEN_HEIGHT - player->get_size());
-			if (player->get_x() - player->get_size() <= 0)
-				player->set_x(player->get_size());
-			if (player->get_x() + player->get_size() >= SCREEN_WIDTH)
-				player->set_x(SCREEN_WIDTH - player->get_size());
-
-
+			player->Update(key);
 
 		}
 		else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
@@ -176,7 +156,7 @@ int main(int argc, char **argv)
 			redraw = false;
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_filled_circle(player->get_x(), player->get_y(), player->get_size(), al_map_rgb(255, 255, 255));
-			al_draw_text(font_pirulen_72, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "Hello World");
+			al_draw_text(font_pirulen_72, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, 10, ALLEGRO_ALIGN_CENTER, "Hello World");
 			//al_draw_textf(font_pirulen_18, al_map_rgb(0, 255, 0), 0, 0, ALLEGRO_ALIGN_LEFT, "Framerate: %d fps", framecount);
 			al_flip_display();
 		}
