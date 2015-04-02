@@ -50,7 +50,9 @@ public:
 	void set_bound(float bound) { GameObject::bound = bound; }
 
 	int get_x_direction() { return direction_x; }
+	void set_x_direction(int direction_x) { GameObject::direction_x = direction_x; }
 	int get_y_direction() { return direction_y; }
+	void set_y_direction(int direction_y) { GameObject::direction_y = direction_y; }
 
 	virtual void Update(const bool *key);
 

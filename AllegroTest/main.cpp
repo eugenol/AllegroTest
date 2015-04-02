@@ -25,6 +25,7 @@ int main(int argc, char **argv)
 	bool redraw = false;
 	int framecount =0;
 	bool key[5] = { false, false, false, false, false};
+	srand(time(NULL));
 
 	std::list<GameObject*> objects;
 
@@ -89,7 +90,7 @@ int main(int argc, char **argv)
 
 	//Create Display
 	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
-	al_set_new_display_flags(ALLEGRO_NOFRAME);
+	//al_set_new_display_flags(ALLEGRO_NOFRAME);
 	display = al_create_display(SCREEN_WIDTH, SCREEN_HEIGHT);
 	if (!display)
 	{
@@ -97,7 +98,7 @@ int main(int argc, char **argv)
 			NULL, ALLEGRO_MESSAGEBOX_ERROR);
 		return -1;
 	}
-	al_set_window_title(display, "IRON MAN vs. CAPTAIN AMERICA");
+	al_set_window_title(display, "IRON MAN vs. HULK");
 
 	//Create Timer
 	timer = al_create_timer(1.0 / FPS);
@@ -209,7 +210,7 @@ int main(int argc, char **argv)
 			//al_draw_bitmap_region(background, 0, 0, 800, 600, 0, 0,0);
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 				(*iter)->Draw();
-			al_draw_text(font_pirulen_24, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, 10, ALLEGRO_ALIGN_CENTER, "IRON MAN vs. CAPTAIN AMERICA");
+			al_draw_text(font_pirulen_24, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, 10, ALLEGRO_ALIGN_CENTER, "IRON MAN vs. HULK");
 			al_flip_display();
 		}
 	}

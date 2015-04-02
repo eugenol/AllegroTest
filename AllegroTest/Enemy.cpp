@@ -12,7 +12,31 @@ Enemy::~Enemy()
 
 void Enemy::Update(const bool *key)
 {
-
+	const bool fake_key[4] = { false, false, false, false };
+	this->set_x_direction(0);
+	if (rand() % 10 == 0)
+	{
+		switch (rand() % 4)
+		{
+			case 0:
+				this->set_y(this->get_y() + this->get_y_velocity());
+				this->set_y_direction(-1);
+				break;
+			case 1:
+				this->set_y(this->get_y() - this->get_y_velocity());
+				this->set_y_direction(+1);
+				break;
+			case 2:
+				this->set_x(this->get_x() - this->get_x_velocity());
+				this->set_x_direction(-1);
+				break;
+			case 3:
+				this->set_x(this->get_x() + this->get_x_velocity());
+				this->set_x_direction(1);
+				break;
+		}
+	}
+	GameObject::Update(fake_key);
 }
 
 void Enemy::Draw()
