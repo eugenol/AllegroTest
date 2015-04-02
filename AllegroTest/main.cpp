@@ -1,8 +1,9 @@
-#include <allegro5/allegro.h>
+/*#include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
+*/
 
 #include "GameObject.h"
 #include "Player.h"
@@ -20,15 +21,6 @@ int main(int argc, char **argv)
 	int framecount =0;
 	bool key[4] = { false, false, false, false };
 
-	//New Player Object
-	GameObject *player;
-	player = new Player;
-	player->set_x(SCREEN_WIDTH / 2);
-	player->set_y(SCREEN_HEIGHT / 2);
-	player->set_x_velocity(5);
-	player->set_y_velocity(5);
-	player->set_size(8);
-	
 	//Intitializations
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
@@ -49,6 +41,15 @@ int main(int argc, char **argv)
 	al_init_ttf_addon();
 	al_install_keyboard();
 	al_init_primitives_addon();
+
+	//New Player Object
+	GameObject *player;
+	player = new Player;
+	player->set_x(SCREEN_WIDTH / 2);
+	player->set_y(SCREEN_HEIGHT / 2);
+	player->set_x_velocity(5);
+	player->set_y_velocity(5);
+	player->set_size(8);
 
 	//Create Display
 	display = al_create_display(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -155,7 +156,8 @@ int main(int argc, char **argv)
 		{
 			redraw = false;
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-			al_draw_filled_circle(player->get_x(), player->get_y(), player->get_size(), al_map_rgb(255, 255, 255));
+			player->Draw();
+			//al_draw_filled_circle(player->get_x(), player->get_y(), player->get_size(), al_map_rgb(255, 255, 255));
 			al_draw_text(font_pirulen_72, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, 10, ALLEGRO_ALIGN_CENTER, "Hello World");
 			//al_draw_textf(font_pirulen_18, al_map_rgb(0, 255, 0), 0, 0, ALLEGRO_ALIGN_LEFT, "Framerate: %d fps", framecount);
 			al_flip_display();

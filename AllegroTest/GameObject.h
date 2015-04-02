@@ -1,4 +1,9 @@
 #pragma once
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_native_dialog.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_primitives.h>
 
 //Consts
 const int SCREEN_WIDTH = 800;
@@ -34,6 +39,8 @@ public:
 	void set_size(float size) { GameObject::size = size; }
 
 	virtual void Update(const bool *key);
+
+	virtual void Draw() = 0;
 
 };
 
