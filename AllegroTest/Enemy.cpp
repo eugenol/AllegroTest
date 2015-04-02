@@ -14,7 +14,8 @@ void Enemy::Update(const bool *key)
 {
 	const bool fake_key[4] = { false, false, false, false };
 	this->set_x_direction(0);
-	if (rand() % 10 == 0)
+	this->set_y_direction(0);
+	if (rand() % 2 == 0)
 	{
 		switch (rand() % 4)
 		{

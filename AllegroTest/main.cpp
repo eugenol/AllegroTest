@@ -76,8 +76,8 @@ int main(int argc, char **argv)
 	enemy = new Enemy;
 	enemy->set_x(SCREEN_WIDTH / 2);
 	enemy->set_y(SCREEN_HEIGHT-28);
-	enemy->set_x_velocity(5);
-	enemy->set_y_velocity(5);
+	enemy->set_x_velocity(10);
+	enemy->set_y_velocity(10);
 	enemy->set_width(40);
 	enemy->set_height(56);
 	enemy->set_bound(1);
