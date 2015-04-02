@@ -21,15 +21,17 @@ int main(int argc, char **argv)
 	bool game_done = false;
 	bool redraw = false;
 	int framecount =0;
-	bool key[4] = { false, false, false, false };
+	bool key[8] = { false, false, false, false, false, false, false, false };
 
 	//Intitializations
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_FONT *font_pirulen_18 = NULL;
+	ALLEGRO_FONT *font_pirulen_24 = NULL;
 	ALLEGRO_FONT *font_pirulen_72 = NULL;
-	ALLEGRO_BITMAP *player_image = NULL;
+	ALLEGRO_BITMAP *player1_image = NULL;
+	ALLEGRO_BITMAP *player2_image = NULL;
 	//ALLEGRO_BITMAP *background = NULL;
 
 	//Intitalize allegro
@@ -48,17 +50,26 @@ int main(int argc, char **argv)
 	al_init_image_addon();
 
 	//New Player Object
-	player_image = al_load_bitmap("ironman.png");
-	Player *player;
-	player = new Player;
-	player->set_x(SCREEN_WIDTH / 2);
-	player->set_y(SCREEN_HEIGHT / 2);
-	player->set_x_velocity(5);
-	player->set_y_velocity(5);
-	player->set_width(32);
-	player->set_height(48);
-	player->set_bound(1);
-	player->setImage(player_image);
+	player1_image = al_load_bitmap("ironman.png");
+	player2_image = al_load_bitmap("captainamerica_shield.png");
+
+	Player *player[2];
+
+	for (int i = 0; i < 2; i++)
+	{
+		player[i] = new Player;
+		player[i]->set_x(SCREEN_WIDTH / 4 *(2*i+1));
+		player[i]->set_y(SCREEN_HEIGHT / 2);
+		player[i]->set_x_velocity(5);
+		player[i]->set_y_velocity(5);
+		player[i]->set_width(32);
+		player[i]->set_height(48);
+		player[i]->set_bound(1);
+	}
+	player[0]->setImage(player1_image);
+	player[0]->setLeft(true);
+	player[1]->setImage(player2_image);
+	player[1]->setLeft(false);
 
 	//Load Background
 	//background = al_load_bitmap("background.png");
@@ -92,6 +103,7 @@ int main(int argc, char **argv)
 
 	//Create Font
 	font_pirulen_72 = al_load_ttf_font("pirulen.ttf", 72, 0);
+	font_pirulen_24= al_load_ttf_font("pirulen.ttf", 24, 0);
 	font_pirulen_18 = al_load_ttf_font("pirulen.ttf", 18, 0);
 	if (!font_pirulen_72 && !font_pirulen_18)
 	{
@@ -120,8 +132,9 @@ int main(int argc, char **argv)
 		if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
 			redraw = true;
-
-			player->Update(key);
+			
+			for (int i = 0; i < 2; i++)
+				player[i]->Update(key);
 
 		}
 		else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
@@ -139,6 +152,19 @@ int main(int argc, char **argv)
 					break;
 				case ALLEGRO_KEY_RIGHT:
 					key[KEY_RIGHT] = true;
+					break;
+
+				case ALLEGRO_KEY_W:
+					key[KEY_W] = true;
+					break;
+				case ALLEGRO_KEY_S:
+					key[KEY_S] = true;
+					break;
+				case ALLEGRO_KEY_A:
+					key[KEY_A] = true;
+					break;
+				case ALLEGRO_KEY_D:
+					key[KEY_D] = true;
 					break;
 			}
 		}
@@ -158,6 +184,19 @@ int main(int argc, char **argv)
 			case ALLEGRO_KEY_RIGHT:
 				key[KEY_RIGHT] = false;
 				break;
+
+			case ALLEGRO_KEY_W:
+				key[KEY_W] = false;
+				break;
+			case ALLEGRO_KEY_S:
+				key[KEY_S] = false;
+				break;
+			case ALLEGRO_KEY_A:
+				key[KEY_A] = false;
+				break;
+			case ALLEGRO_KEY_D:
+				key[KEY_D] = false;
+				break;
 			}
 		}
 		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
@@ -168,17 +207,21 @@ int main(int argc, char **argv)
 			redraw = false;
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			//al_draw_bitmap_region(background, 0, 0, 800, 600, 0, 0,0);
-			player->Draw();
-			al_draw_text(font_pirulen_72, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, 10, ALLEGRO_ALIGN_CENTER, "IRON MAN");
+			for (int i = 0; i < 2; i++)
+				player[i]->Draw();
+			al_draw_text(font_pirulen_24, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, 10, ALLEGRO_ALIGN_CENTER, "IRON MAN vs. CAPTAIN AMERICA");
 			al_flip_display();
 		}
 	}
 
 	//Destroy
 	//al_destroy_bitmap(background);
-	delete player;
-	al_destroy_bitmap(player_image);
+	for (int i = 0; i < 2; i++)
+		delete player[i];
+	al_destroy_bitmap(player2_image);
+	al_destroy_bitmap(player1_image);
 	al_destroy_font(font_pirulen_72);
+	al_destroy_font(font_pirulen_24);
 	al_destroy_font(font_pirulen_18);
 	al_destroy_event_queue(event_queue);
 	al_destroy_timer(timer);
