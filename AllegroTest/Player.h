@@ -9,8 +9,9 @@ public:
 	~Player();
 
 	void setImage(ALLEGRO_BITMAP *image) { Player::image = image; }
+	void setLeft(bool left) { Player::left = left; }
 	void Update(const bool *key);
 	void Draw();
-	void setLeft(bool left) { Player::left = left; }
+
 };
 

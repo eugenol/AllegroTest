@@ -73,15 +73,16 @@ int main(int argc, char **argv)
 		objects.push_back(player[i]);
 	}
 	player[0]->setImage(player1_image);
-	player[0]->setLeft(true);
+	player[0]->setLeft(false);
 	player[1]->setImage(player2_image);
-	player[1]->setLeft(false);
+	player[1]->setLeft(true);
 
 
 	//Load Background
 	//background = al_load_bitmap("background.png");
 
 	//Create Display
+	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 	display = al_create_display(SCREEN_WIDTH, SCREEN_HEIGHT);
 	if (!display)
 	{
