@@ -9,6 +9,7 @@
 #include "GameObject.h"
 #include "Player.h"
 
+
 int main(int argc, char **argv)
 {
 	//Consts
@@ -29,6 +30,7 @@ int main(int argc, char **argv)
 	ALLEGRO_FONT *font_pirulen_18 = NULL;
 	ALLEGRO_FONT *font_pirulen_72 = NULL;
 	ALLEGRO_BITMAP *player_image = NULL;
+	//ALLEGRO_BITMAP *background = NULL;
 
 	//Intitalize allegro
 	if (!al_init())
@@ -57,6 +59,9 @@ int main(int argc, char **argv)
 	player->set_height(48);
 	player->set_bound(1);
 	player->setImage(player_image);
+
+	//Load Background
+	//background = al_load_bitmap("background.png");
 
 	//Create Display
 	display = al_create_display(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -100,8 +105,7 @@ int main(int argc, char **argv)
 	al_register_event_source(event_queue, al_get_timer_event_source(timer)); // timer events
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 
-	//Load addons
-
+	
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
 
@@ -163,15 +167,15 @@ int main(int argc, char **argv)
 		{
 			redraw = false;
 			al_clear_to_color(al_map_rgb(0, 0, 0));
+			//al_draw_bitmap_region(background, 0, 0, 800, 600, 0, 0,0);
 			player->Draw();
-			//al_draw_filled_circle(player->get_x(), player->get_y(), player->get_size(), al_map_rgb(255, 255, 255));
-			al_draw_text(font_pirulen_72, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, 10, ALLEGRO_ALIGN_CENTER, "Hello World");
-			//al_draw_textf(font_pirulen_18, al_map_rgb(0, 255, 0), 0, 0, ALLEGRO_ALIGN_LEFT, "Framerate: %d fps", framecount);
+			al_draw_text(font_pirulen_72, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, 10, ALLEGRO_ALIGN_CENTER, "IRON MAN");
 			al_flip_display();
 		}
 	}
 
 	//Destroy
+	//al_destroy_bitmap(background);
 	delete player;
 	al_destroy_bitmap(player_image);
 	al_destroy_font(font_pirulen_72);

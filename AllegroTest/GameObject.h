@@ -21,6 +21,8 @@ class GameObject
 	float velocity_x;
 	float velocity_y;
 	float bound;
+	int direction_x;
+	int direction_y;
 public:
 	GameObject();
 	~GameObject();
@@ -46,6 +48,9 @@ public:
 
 	float get_bound() { return bound; }
 	void set_bound(float bound) { GameObject::bound = bound; }
+
+	int get_x_direction() { return direction_x; }
+	int get_y_direction() { return direction_y; }
 
 	virtual void Update(const bool *key);
 
