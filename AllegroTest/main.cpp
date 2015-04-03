@@ -171,6 +171,9 @@ int main(int argc, char **argv)
 	//Start playing the music
 	//al_play_sample_instance(bgInstance);//turned off for now.. it can get irritating!!
 
+	//keep track of framerate
+	double old_time = al_get_time();
+
 	al_start_timer(timer); //Start the timer
 
 	//Game Loop
@@ -247,17 +250,26 @@ int main(int argc, char **argv)
 		if (redraw && al_is_event_queue_empty(event_queue)) //have to wait until event queue is empty befor redrawing.
 		{
 			redraw = false;
+
+			double new_time = al_get_time();
+			double delta = new_time - old_time;
+			float fps = 1 /(float) (delta);
+			old_time = new_time;
+
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-			//al_draw_filled_rectangle(0, 0, 1200, 600, al_map_rgb(2555, 0, 255));
-			al_draw_bitmap(background, 0, 0, NULL);
-			al_draw_bitmap(background, 1067, 0, NULL);
+			///using a bitmap as a background kills the framerate. Draw lines to see motion effect.
+			for (int i = 0; i < 100; i++)
+				al_draw_line(i*75, 0, i*75, SCREEN_HEIGHT, al_map_rgb(255, 0, 255), 2);
+			//al_draw_filled_rectangle(0, 0, 1200, 600, al_map_rgb(255, 0, 255));
+			//al_draw_bitmap(background, 0, 0, NULL);
+			//al_draw_bitmap(background, 1067, 0, NULL);
 			//for (int i = 0; i < 20; i++)
 			//	al_draw_line(i * 100, 0, i * 100, 600, al_map_rgb(255,255,255), 2);
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 				(*iter)->Draw();
 
 			al_draw_text(font_pirulen_24, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, 10, ALLEGRO_ALIGN_CENTER, "IRON MAN vs. HULK");
-			//al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), 0, 10, ALLEGRO_ALIGN_CENTER, "%f fps",);
+			al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), SCREEN_WIDTH/2 + cameraPosition[0] ,30, ALLEGRO_ALIGN_CENTER, "%0.0f fps", fps);
 			al_flip_display();
 		}
 	}
