@@ -3,13 +3,15 @@
 class Player : public GameObject
 {
 	ALLEGRO_BITMAP *image;
-	bool left;
+	int currframeRow;
+	int currframeCol;
 public:
 	Player();
 	~Player();
 
 	void setImage(ALLEGRO_BITMAP *image) { Player::image = image; }
-	void setLeft(bool left) { Player::left = left; }
+	void setFrameRow(int row) {currframeRow = row;}
+	void setFrameColumn(int column) { currframeCol = column;}
 	void Update(const bool *key);
 	void Draw();
 

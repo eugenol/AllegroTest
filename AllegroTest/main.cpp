@@ -5,6 +5,9 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
 */
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
+
 #include <list>
 
 
@@ -38,6 +41,10 @@ int main(int argc, char **argv)
 	ALLEGRO_FONT *font_pirulen_72 = NULL;
 	ALLEGRO_BITMAP *player_image = NULL;
 	ALLEGRO_BITMAP *enemy_image = NULL;
+	//Background music
+	ALLEGRO_SAMPLE *bg_music = NULL;
+	ALLEGRO_SAMPLE_INSTANCE *bgInstance = NULL;
+
 	//ALLEGRO_BITMAP *background = NULL;
 
 	//Intitalize allegro
@@ -49,11 +56,17 @@ int main(int argc, char **argv)
 	}
 
 	//Intitialize addons
+	//Fonts
 	al_init_font_addon();
 	al_init_ttf_addon();
+	//Keyboard
 	al_install_keyboard();
+	//Images & Primatives(shapes)
 	al_init_primitives_addon();
 	al_init_image_addon();
+	//Audio
+	al_install_audio();
+	al_init_acodec_addon();
 
 	//New Player Object
 	player_image = al_load_bitmap("ironman.png");
@@ -71,6 +84,8 @@ int main(int argc, char **argv)
 	player->set_height(48);
 	player->set_bound(1);
 	player->setImage(player_image);
+	player->setFrameColumn(0);
+	player->setFrameRow(0);
 	objects.push_back(player);
 
 	enemy = new Enemy;
@@ -83,6 +98,14 @@ int main(int argc, char **argv)
 	enemy->set_bound(1);
 	enemy->setImage(enemy_image);
 	objects.push_back(enemy);
+
+	//Sounds & Musics
+	al_reserve_samples(1);
+	bg_music = al_load_sample("A Night of Dizzy Spells.ogg");
+	bgInstance = al_create_sample_instance(bg_music);
+	al_set_sample_instance_playmode(bgInstance, ALLEGRO_PLAYMODE_LOOP);
+	//can set other properties here such as speed, gain, etc..
+	al_attach_sample_instance_to_mixer(bgInstance, al_get_default_mixer());
 
 
 	//Load Background
@@ -138,6 +161,9 @@ int main(int argc, char **argv)
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
 
+	//Start playing the music
+	al_play_sample_instance(bgInstance);
+
 	al_start_timer(timer); //Start the timer
 
 	//Game Loop
@@ -149,12 +175,16 @@ int main(int argc, char **argv)
 		if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
 			redraw = true;
+	
+			//al_get_keyboard_state();
 			
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 				(*iter)->Update(key);
 
+
 		}
-		else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
+
+		if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
 		{
 			switch (ev.keyboard.keycode)
 			{
@@ -175,7 +205,8 @@ int main(int argc, char **argv)
 					break;
 			}
 		}
-		else if (ev.type == ALLEGRO_EVENT_KEY_UP)
+
+		if (ev.type == ALLEGRO_EVENT_KEY_UP)
 		{
 			switch (ev.keyboard.keycode)
 			{
@@ -200,7 +231,7 @@ int main(int argc, char **argv)
 				break;
 			}
 		}
-		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 			game_done = true;
 
 		if (redraw && al_is_event_queue_empty(event_queue)) //have to wait until event queue is empty befor redrawing.
@@ -210,7 +241,9 @@ int main(int argc, char **argv)
 			//al_draw_bitmap_region(background, 0, 0, 800, 600, 0, 0,0);
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 				(*iter)->Draw();
+
 			al_draw_text(font_pirulen_24, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, 10, ALLEGRO_ALIGN_CENTER, "IRON MAN vs. HULK");
+			//al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), 0, 10, ALLEGRO_ALIGN_CENTER, "%f fps",);
 			al_flip_display();
 		}
 	}
@@ -218,7 +251,8 @@ int main(int argc, char **argv)
 	//Destroy
 	delete player;
 	delete enemy;
-
+	al_destroy_sample_instance(bgInstance);
+	al_destroy_sample(bg_music);
 	al_destroy_bitmap(enemy_image);
 	al_destroy_bitmap(player_image);
 	al_destroy_font(font_pirulen_72);
