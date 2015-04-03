@@ -7,9 +7,8 @@ class Enemy : public GameObject
 
 	//For finite state ai
 	const float visible_distance = 200;
-	enum STATE{ IDLING, CHASING, RETREATING };
+	enum STATE{ IDLING, CHASING, SEARCHING, RETREATING };
 	int currState = IDLING;
-	int prevState = IDLING;
 	void changeState(int newState);
 	float distanceToPlayer(Player * player);
 	float angleToPlayer(Player * player);

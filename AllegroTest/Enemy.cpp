@@ -14,7 +14,6 @@ Enemy::~Enemy()
 
 void Enemy::changeState(int newState)
 {
-	prevState = currState;
 	currState = newState;
 }
 
@@ -32,32 +31,12 @@ void Enemy::Update(Player* player)
 			this->set_x_direction(x_direction);
 			this->set_x(this->get_x() + this->get_x_velocity()*this->get_x_direction());
 			this->set_y(this->get_y() + this->get_y_velocity()*this->get_y_direction());
-		}
-		else if (prevState==CHASING)
-		{
-			//if enemy just lost sight of the player, move in last known direction
-			float deltax = last_player_x - this->get_x();
-			float deltay = last_player_y - this->get_y();
-			float angle = atan2(deltay, deltax);
 
-			int y_direction = sin(angle) < 0 ? -1 : 1;
-			int x_direction = cos(angle) < 0 ? -1 : 1;
-			this->set_y_direction(y_direction);
-			this->set_x_direction(x_direction);
-			this->set_x(this->get_x() + this->get_x_velocity()*this->get_x_direction());
-			this->set_y(this->get_y() + this->get_y_velocity()*this->get_y_direction());
-			
-			//if the player is in sight again, start chasing him
-			if (visible_distance > distanceToPlayer(player))
-			{
-				changeState(CHASING);
-			}
-			else
-				changeState(IDLING);
+			last_player_x = player->get_x();
+			last_player_y = player->get_y();
 		}
 		else
 		{
-			changeState(IDLING);
 			Loiter();
 		}
 	}
@@ -66,6 +45,8 @@ void Enemy::Update(Player* player)
 		if (visible_distance < distanceToPlayer(player))
 		{
 			//if enemy just lost sight of the player, move in last known direction
+			changeState(SEARCHING);
+			
 			float deltax = last_player_x - this->get_x();
 			float deltay = last_player_y - this->get_y();
 			float angle = atan2(deltay, deltax);
@@ -79,14 +60,11 @@ void Enemy::Update(Player* player)
 
 			//if the player is in sight again, start chasing him
 			if (visible_distance > distanceToPlayer(player))
-			{
 				changeState(CHASING);
-			}
-			else
-				changeState(IDLING);
 		}
 		else
 		{
+			//Move in direction of player
 			int y_direction = sin(angleToPlayer(player)) < 0 ? -1 : 1;
 			int x_direction = cos(angleToPlayer(player)) < 0 ? -1 : 1;
 			this->set_y_direction(y_direction);
@@ -96,7 +74,47 @@ void Enemy::Update(Player* player)
 
 			last_player_x = player->get_x();
 			last_player_y = player->get_y();
+		}
+	}
+	else if (currState == SEARCHING)
+	{
+		// Check if close to the last known position, if then start idling, otherwise, move to last known position
+		float deltax = last_player_x - this->get_x();
+		float deltay = last_player_y - this->get_y();
+
+		if (visible_distance > distanceToPlayer(player))
+		{
 			changeState(CHASING);
+
+			int y_direction = sin(angleToPlayer(player)) < 0 ? -1 : 1;
+			int x_direction = cos(angleToPlayer(player)) < 0 ? -1 : 1;
+			this->set_y_direction(y_direction);
+			this->set_x_direction(x_direction);
+			this->set_x(this->get_x() + this->get_x_velocity()*this->get_x_direction());
+			this->set_y(this->get_y() + this->get_y_velocity()*this->get_y_direction());
+
+			last_player_x = player->get_x();
+			last_player_y = player->get_y();
+		}
+		else if (sqrt(pow(deltax, 2) + pow(deltay, 2)) > 60)
+		{
+			//if enemy just lost sight of the player, move in last known direction
+			float angle = atan2(deltay, deltax);
+
+			int y_direction = sin(angle) < 0 ? -1 : 1;
+			int x_direction = cos(angle) < 0 ? -1 : 1;
+			this->set_y_direction(y_direction);
+			this->set_x_direction(x_direction);
+			this->set_x(this->get_x() + this->get_x_velocity()*this->get_x_direction());
+			this->set_y(this->get_y() + this->get_y_velocity()*this->get_y_direction());
+
+			if (visible_distance > distanceToPlayer(player))
+				changeState(CHASING);
+		}
+		else
+		{
+			changeState(IDLING);
+			Loiter();
 		}
 	}
 	else if (currState == RETREATING)
