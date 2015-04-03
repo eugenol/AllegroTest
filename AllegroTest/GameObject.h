@@ -6,6 +6,9 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
 
+#include <stdlib.h>
+#include <time.h>
+
 //Consts
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;

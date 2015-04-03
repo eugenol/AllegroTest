@@ -1,4 +1,6 @@
-/*#include <allegro5/allegro.h>
+/*
+//Moved to more global file
+#include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
@@ -9,7 +11,6 @@
 #include <allegro5/allegro_acodec.h>
 
 #include <list>
-
 
 #include "GameObject.h"
 #include "Player.h"
@@ -30,6 +31,10 @@ int main(int argc, char **argv)
 	int framecount =0;
 	bool key[5] = { false, false, false, false, false};
 	srand(time(NULL));
+
+	float gameTime = 0;
+	int frames = 0;
+	int gameFPS = 0;
 
 	float cameraPosition[2] = { 0, 0 };
 
@@ -263,8 +268,7 @@ int main(int argc, char **argv)
 			//al_draw_filled_rectangle(0, 0, 1200, 600, al_map_rgb(255, 0, 255));
 			//al_draw_bitmap(background, 0, 0, NULL);
 			//al_draw_bitmap(background, 1067, 0, NULL);
-			//for (int i = 0; i < 20; i++)
-			//	al_draw_line(i * 100, 0, i * 100, 600, al_map_rgb(255,255,255), 2);
+
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 				(*iter)->Draw();
 

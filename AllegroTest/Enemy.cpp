@@ -5,6 +5,7 @@
 
 Enemy::Enemy()
 {
+	srand(time(NULL));
 }
 
 
