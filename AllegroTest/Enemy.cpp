@@ -18,65 +18,67 @@ void Enemy::Update(const bool *key)
 
 	//Choose new direction
 
-	if (rand() % 20 == 0)
+	if (rand() % 80 == 0)
 	{
 		switch (rand() % 2)
 		{
 		case 0:
-		{
-			switch (rand() % 4)
 			{
-			case 0:
-				this->set_y_direction(-1);
-				break;
-			case 1:
-				this->set_y_direction(+1);
-				break;
-			case 2:
-				this->set_x_direction(0);
-				break;
+				switch (rand() % 3)
+				{
+				case 0:
+					this->set_y_direction(-1);
+					break;
+				case 1:
+					this->set_y_direction(+1);
+					break;
+				case 2:
+					this->set_x_direction(0);
+					break;
+				}
 			}
-		}
+			break;
 		case 1:
-		{
-			switch (rand() % 4)
 			{
-			case 0:
-				this->set_x_direction(-1);
-				break;
-			case 1:
-				this->set_x_direction(+1);
-				break;
-			case 2:
-				this->set_x_direction(0);
-				break;
+				switch (rand() % 3)
+				{
+				case 0:
+					this->set_x_direction(-1);
+					break;
+				case 1:
+					this->set_x_direction(+1);
+					break;
+				case 2:
+					this->set_x_direction(0);
+					break;
+				}
 			}
-		}
+			break;
 		}
 	}
 	//bounds checking
 	if (this->get_y() <= 0 + this->get_height()/ 2 + this->get_bound())
 	{
 		this->set_y(0 + this->get_height() / 2 + this->get_bound());
-		this->set_y_direction(-1);
+		this->set_y_direction(1);
 	}
 
 	//Fixed so that their feet toughes the ground
 	if (this->get_y() >= SCREEN_HEIGHT - (this->get_height() / 2 - 2))
 	{
 		this->set_y(SCREEN_HEIGHT - (this->get_height() / 2 - 2));
-		this->set_y_direction(1);
+		this->set_y_direction(-1);
 	}
 
 	if (this->get_x() <= 0 + this->get_width() / 2 + this->get_bound())
 	{
-		this->set_y(0 + this->get_width() / 2 + this->get_bound());
+		this->set_x(0 + this->get_width() / 2 + this->get_bound());
 		this->set_x_direction(1);
 	}
 
 	if (this->get_x() >= SCREEN_WIDTH - (0 + this->get_width() / 2 + this->get_bound()))
 	{
-		this->set_y(SCREEN_WIDTH - (0 + this->get_width() / 2 + this->get_bound()));
+		this->set_x(SCREEN_WIDTH - (0 + this->get_width() / 2 + this->get_bound()));
 		this->set_x_direction(-1);
 	}
 	//GameObject::Update(fake_key);
