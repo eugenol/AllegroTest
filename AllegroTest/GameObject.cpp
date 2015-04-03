@@ -48,7 +48,8 @@ void GameObject::Update(const bool *key)
 
 	if (x <= 0 + width / 2 + bound)
 		x = 0 + width / 2 + bound;
+	//Scrolling, so no need for this check
 
-	if (x >= SCREEN_WIDTH - (0 + width / 2 + bound))
-		x = SCREEN_WIDTH - (0 + width / 2 + bound);
+	//if (x >= SCREEN_WIDTH - (0 + width / 2 + bound))
+	//	x = SCREEN_WIDTH - (0 + width / 2 + bound);
 }

@@ -15,6 +15,16 @@
 #include "Player.h"
 #include "Enemy.h"
 
+void cameraUpdate(float *cameraPosition, float x, float y, int width, int height)
+{
+	cameraPosition[0] = -(SCREEN_WIDTH / 2) + (x /*+ width/2*/);
+	cameraPosition[1] = -(SCREEN_HEIGHT / 2) + (y /*+ height/2*/);
+
+	if (cameraPosition[0] < 0)
+		cameraPosition[0] = 0;
+	if (cameraPosition[1] < 0)
+		cameraPosition[1] = 0;
+}
 
 int main(int argc, char **argv)
 {
@@ -30,22 +40,28 @@ int main(int argc, char **argv)
 	bool key[5] = { false, false, false, false, false};
 	srand(time(NULL));
 
+	float cameraPosition[2] = { 0, 0 };
+
 	std::list<GameObject*> objects;
 
 	//Intitializations
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
+	//Fonts
 	ALLEGRO_FONT *font_pirulen_18 = NULL;
 	ALLEGRO_FONT *font_pirulen_24 = NULL;
 	ALLEGRO_FONT *font_pirulen_72 = NULL;
+	//Images
 	ALLEGRO_BITMAP *player_image = NULL;
 	ALLEGRO_BITMAP *enemy_image = NULL;
+	ALLEGRO_BITMAP *background = NULL;
 	//Background music
 	ALLEGRO_SAMPLE *bg_music = NULL;
 	ALLEGRO_SAMPLE_INSTANCE *bgInstance = NULL;
 
-	//ALLEGRO_BITMAP *background = NULL;
+	//Camera
+	ALLEGRO_TRANSFORM camera;
 
 	//Intitalize allegro
 	if (!al_init())
@@ -76,8 +92,8 @@ int main(int argc, char **argv)
 	Enemy *enemy;
 
 	player = new Player;
-	player->set_x(SCREEN_WIDTH /2);
-	player->set_y(3*SCREEN_HEIGHT / 4);
+	player->set_x(5);
+	player->set_y(SCREEN_HEIGHT-70);
 	player->set_x_velocity(5);
 	player->set_y_velocity(5);
 	player->set_width(32*2);
@@ -109,7 +125,7 @@ int main(int argc, char **argv)
 
 
 	//Load Background
-	//background = al_load_bitmap("background.png");
+	background = al_load_bitmap("city_background.png");
 
 	//Create Display
 	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
@@ -181,7 +197,10 @@ int main(int argc, char **argv)
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 				(*iter)->Update(key);
 
-
+			cameraUpdate(cameraPosition, player->get_x(), player->get_y(), player->get_width(), player->get_height());
+			al_identity_transform(&camera);
+			al_translate_transform(&camera, -cameraPosition[0], 0);
+			al_use_transform(&camera);
 		}
 
 		if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
@@ -238,7 +257,7 @@ int main(int argc, char **argv)
 		{
 			redraw = false;
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-			//al_draw_bitmap_region(background, 0, 0, 800, 600, 0, 0,0);
+			al_draw_bitmap(background, 0, 0, NULL);
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 				(*iter)->Draw();
 
@@ -251,6 +270,7 @@ int main(int argc, char **argv)
 	//Destroy
 	delete player;
 	delete enemy;
+	al_destroy_bitmap(background);
 	al_destroy_sample_instance(bgInstance);
 	al_destroy_sample(bg_music);
 	al_destroy_bitmap(enemy_image);
