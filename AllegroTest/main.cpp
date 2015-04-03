@@ -15,16 +15,7 @@
 #include "Player.h"
 #include "Enemy.h"
 
-void cameraUpdate(float *cameraPosition, float x, float y, int width, int height)
-{
-	cameraPosition[0] = -(SCREEN_WIDTH / 2) + (x /*+ width/2*/);
-	cameraPosition[1] = -(SCREEN_HEIGHT / 2) + (y /*+ height/2*/);
-
-	if (cameraPosition[0] < 0)
-		cameraPosition[0] = 0;
-	if (cameraPosition[1] < 0)
-		cameraPosition[1] = 0;
-}
+void cameraUpdate(float *cameraPosition, float x, float y, int width, int height);
 
 int main(int argc, char **argv)
 {
@@ -55,7 +46,7 @@ int main(int argc, char **argv)
 	//Images
 	ALLEGRO_BITMAP *player_image = NULL;
 	ALLEGRO_BITMAP *enemy_image = NULL;
-	ALLEGRO_BITMAP *background = NULL;
+	ALLEGRO_BITMAP *background = NULL; //Terribly slow when using a background image.
 	//Background music
 	ALLEGRO_SAMPLE *bg_music = NULL;
 	ALLEGRO_SAMPLE_INSTANCE *bgInstance = NULL;
@@ -94,8 +85,8 @@ int main(int argc, char **argv)
 	player = new Player;
 	player->set_x(5);
 	player->set_y(SCREEN_HEIGHT-70);
-	player->set_x_velocity(5);
-	player->set_y_velocity(5);
+	player->set_x_velocity(10);
+	player->set_y_velocity(2);
 	player->set_width(32*2);
 	player->set_height(48*2);
 	player->set_bound(1);
@@ -107,8 +98,8 @@ int main(int argc, char **argv)
 	enemy = new Enemy;
 	enemy->set_x(SCREEN_WIDTH / 2);
 	enemy->set_y(SCREEN_HEIGHT-28);
-	enemy->set_x_velocity(10);
-	enemy->set_y_velocity(10);
+	enemy->set_x_velocity(3);
+	enemy->set_y_velocity(0);
 	enemy->set_width(40*2);
 	enemy->set_height(56*2);
 	enemy->set_bound(1);
@@ -178,7 +169,7 @@ int main(int argc, char **argv)
 	al_flip_display();
 
 	//Start playing the music
-	al_play_sample_instance(bgInstance);
+	//al_play_sample_instance(bgInstance);
 
 	al_start_timer(timer); //Start the timer
 
@@ -257,7 +248,11 @@ int main(int argc, char **argv)
 		{
 			redraw = false;
 			al_clear_to_color(al_map_rgb(0, 0, 0));
+			//al_draw_filled_rectangle(0, 0, 1200, 600, al_map_rgb(2555, 0, 255));
 			al_draw_bitmap(background, 0, 0, NULL);
+			al_draw_bitmap(background, 1067, 0, NULL);
+			//for (int i = 0; i < 20; i++)
+			//	al_draw_line(i * 100, 0, i * 100, 600, al_map_rgb(255,255,255), 2);
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 				(*iter)->Draw();
 
@@ -283,4 +278,15 @@ int main(int argc, char **argv)
 	al_destroy_display(display);
 
 	return 0;
+}
+
+void cameraUpdate(float *cameraPosition, float x, float y, int width, int height)
+{
+	cameraPosition[0] = -(SCREEN_WIDTH / 2) + (x /*+ width/2*/);
+	cameraPosition[1] = -(SCREEN_HEIGHT / 2) + (y /*+ height/2*/);
+
+	if (cameraPosition[0] < 0)
+		cameraPosition[0] = 0;
+	if (cameraPosition[1] < 0)
+		cameraPosition[1] = 0;
 }

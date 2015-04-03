@@ -76,11 +76,12 @@ void Enemy::Update(const bool *key)
 		this->set_x_direction(1);
 	}
 
-	if (this->get_x() >= SCREEN_WIDTH - (0 + this->get_width() / 2 + this->get_bound()))
-	{
-		this->set_x(SCREEN_WIDTH - (0 + this->get_width() / 2 + this->get_bound()));
-		this->set_x_direction(-1);
-	}
+	//No bound on leaving the screen
+	//if (this->get_x() >= SCREEN_WIDTH - (0 + this->get_width() / 2 + this->get_bound()))
+	//{
+	//	this->set_x(SCREEN_WIDTH - (0 + this->get_width() / 2 + this->get_bound()));
+	//	this->set_x_direction(-1);
+	//}
 	//GameObject::Update(fake_key);
 }
 
