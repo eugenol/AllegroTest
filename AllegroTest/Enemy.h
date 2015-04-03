@@ -8,10 +8,13 @@ class Enemy : public GameObject
 	//For finite state ai
 	const float visible_distance = 200;
 	enum STATE{ IDLING, CHASING, RETREATING };
-	int state=IDLING;
-	void changeState(int newState) { state = newState; }
+	int currState = IDLING;
+	int prevState = IDLING;
+	void changeState(int newState);
 	float distanceToPlayer(Player * player);
 	float angleToPlayer(Player * player);
+	float last_player_x;
+	float last_player_y;
 	void Loiter();
 public:
 	Enemy();
