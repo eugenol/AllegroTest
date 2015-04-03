@@ -1,4 +1,6 @@
 #include "Enemy.h"
+#include <math.h>
+
 
 
 Enemy::Enemy()
@@ -10,54 +12,49 @@ Enemy::~Enemy()
 {
 }
 
-void Enemy::Update(const bool *key)
+void Enemy::Update(Player* player)
 {
-	// Move
-	this->set_y(this->get_y() + this->get_y_velocity()*this->get_y_direction());
-	this->set_x(this->get_x() + this->get_x_velocity()*this->get_x_direction());
-
-	//Choose new direction
-
-	if (rand() % 80 == 0)
+	if (state == IDLING)
 	{
-		switch (rand() % 2)
+		if (visible_distance > distanceToPlayer(player))
 		{
-		case 0:
-			{
-				switch (rand() % 3)
-				{
-				case 0:
-					this->set_y_direction(-1);
-					break;
-				case 1:
-					this->set_y_direction(+1);
-					break;
-				case 2:
-					this->set_x_direction(0);
-					break;
-				}
-			}
-			break;
-		case 1:
-			{
-				switch (rand() % 3)
-				{
-				case 0:
-					this->set_x_direction(-1);
-					break;
-				case 1:
-					this->set_x_direction(+1);
-					break;
-				case 2:
-					this->set_x_direction(0);
-					break;
-				}
-			}
-			break;
+			changeState(CHASING);
+			int y_direction = sin(angleToPlayer(player)) < 0 ? -1 : 1;
+			int x_direction = cos(angleToPlayer(player)) < 0 ? -1 : 1;
+			this->set_y_direction(y_direction);
+			this->set_x_direction(x_direction);
+			this->set_x(this->get_x() + this->get_x_velocity()*this->get_x_direction());
+			this->set_y(this->get_y() + this->get_y_velocity()*this->get_y_direction());
+		}
+		else
+		{
+			Loiter();
 		}
 	}
+	else if (state == CHASING)
+	{
+		if (visible_distance < distanceToPlayer(player))
+		{
+			changeState(IDLING);
+			Loiter();
+		}
+		else
+		{
+			int y_direction = sin(angleToPlayer(player)) < 0 ? -1 : 1;
+			int x_direction = cos(angleToPlayer(player)) < 0 ? -1 : 1;
+			this->set_y_direction(y_direction);
+			this->set_x_direction(x_direction);
+			this->set_x(this->get_x() + this->get_x_velocity()*this->get_x_direction());
+			this->set_y(this->get_y() + this->get_y_velocity()*this->get_y_direction());
+		}
+	}
+	else if (state == RETREATING)
+	{
+		//Not used yet.
+	}
+
 	//bounds checking
-	if (this->get_y() <= 0 + this->get_height()/ 2 + this->get_bound())
+	if (this->get_y() <= 0 + this->get_height() / 2 + this->get_bound())
 	{
 		this->set_y(0 + this->get_height() / 2 + this->get_bound());
 		this->set_y_direction(1);
@@ -83,6 +80,19 @@ void Enemy::Update(const bool *key)
 	//	this->set_x_direction(-1);
 	//}
 	//GameObject::Update(fake_key);
+}
+
+float Enemy::distanceToPlayer(Player* player)
+{
+	return sqrt(pow(player->get_x() - this->get_x(), 2) + pow(player->get_y() - this->get_y(), 2));
+}
+
+float Enemy::angleToPlayer(Player* player)
+{
+	float deltax = player->get_x() - this->get_x();
+	float deltay = player->get_y() - this->get_y();
+
+	return atan2(deltay, deltax);
 }
 
 void Enemy::Draw()
@@ -112,6 +122,57 @@ void Enemy::Draw()
 	//al_draw_bitmap_region(image, start_image_x, start_image_y, image_width, image_height,
 	//	this->get_x() - image_width / 2, this->get_y() - image_height / 2, 0);
 	
+	// visibility circle
+	al_draw_circle(this->get_x(), this->get_y(), visible_distance, al_map_rgb(255, 0, 255),2);
+
 	al_draw_scaled_bitmap(image, start_image_x, start_image_y, image_width, image_height,
 		this->get_x() - image_width, this->get_y() - image_height, image_width*2, image_height*2, 0);
+}
+
+void Enemy::Loiter()
+{
+	// Move
+	this->set_y(this->get_y() + this->get_y_velocity()*this->get_y_direction());
+	this->set_x(this->get_x() + this->get_x_velocity()*this->get_x_direction());
+
+	//Choose new direction
+
+	if (rand() % 80 == 0)
+	{
+		switch (rand() % 2)
+		{
+		case 0:
+		{
+			switch (rand() % 3)
+			{
+			case 0:
+				this->set_y_direction(-1);
+				break;
+			case 1:
+				this->set_y_direction(+1);
+				break;
+			case 2:
+				this->set_x_direction(0);
+				break;
+			}
+		}
+		break;
+		case 1:
+		{
+			switch (rand() % 3)
+			{
+			case 0:
+				this->set_x_direction(-1);
+				break;
+			case 1:
+				this->set_x_direction(+1);
+				break;
+			case 2:
+				this->set_x_direction(0);
+				break;
+			}
+		}
+		break;
+		}
+	}
 }

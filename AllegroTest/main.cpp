@@ -85,8 +85,8 @@ int main(int argc, char **argv)
 	player = new Player;
 	player->set_x(5);
 	player->set_y(SCREEN_HEIGHT-70);
-	player->set_x_velocity(10);
-	player->set_y_velocity(2);
+	player->set_x_velocity(5);
+	player->set_y_velocity(5);
 	player->set_width(32*2);
 	player->set_height(48*2);
 	player->set_bound(1);
@@ -99,7 +99,7 @@ int main(int argc, char **argv)
 	enemy->set_x(SCREEN_WIDTH / 2);
 	enemy->set_y(SCREEN_HEIGHT-28);
 	enemy->set_x_velocity(3);
-	enemy->set_y_velocity(0);
+	enemy->set_y_velocity(3);
 	enemy->set_width(40*2);
 	enemy->set_height(56*2);
 	enemy->set_bound(1);
@@ -169,7 +169,7 @@ int main(int argc, char **argv)
 	al_flip_display();
 
 	//Start playing the music
-	al_play_sample_instance(bgInstance);
+	//al_play_sample_instance(bgInstance);//turned off for now.. it can get irritating!!
 
 	al_start_timer(timer); //Start the timer
 
@@ -185,8 +185,8 @@ int main(int argc, char **argv)
 	
 			//al_get_keyboard_state();
 			
-			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
-				(*iter)->Update(key);
+			player->Update(key);
+			enemy->Update(player);
 
 			cameraUpdate(cameraPosition, player->get_x(), player->get_y(), player->get_width(), player->get_height());
 			al_identity_transform(&camera);
