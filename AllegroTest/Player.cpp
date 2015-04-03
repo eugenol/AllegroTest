@@ -43,6 +43,9 @@ void Player::Draw()
 		currframeCol = 0;
 	*/
 
-	al_draw_bitmap_region(image,currframeCol*image_width , currframeRow*image_height, image_width, image_height,
-		this->get_x() - image_width / 2, this->get_y() - image_height / 2, 0);
+	//al_draw_bitmap_region(image,currframeCol*image_width , currframeRow*image_height, image_width, image_height,
+	//	this->get_x() - image_width / 2, this->get_y() - image_height / 2, 0);
+
+	al_draw_scaled_bitmap(image, currframeCol*image_width, currframeRow*image_height, image_width, image_height,
+		this->get_x() - image_width, this->get_y() - image_height, image_width * 2, image_height*2, 0);
 }

@@ -80,8 +80,8 @@ int main(int argc, char **argv)
 	player->set_y(3*SCREEN_HEIGHT / 4);
 	player->set_x_velocity(5);
 	player->set_y_velocity(5);
-	player->set_width(32);
-	player->set_height(48);
+	player->set_width(32*2);
+	player->set_height(48*2);
 	player->set_bound(1);
 	player->setImage(player_image);
 	player->setFrameColumn(0);
@@ -93,8 +93,8 @@ int main(int argc, char **argv)
 	enemy->set_y(SCREEN_HEIGHT-28);
 	enemy->set_x_velocity(10);
 	enemy->set_y_velocity(10);
-	enemy->set_width(40);
-	enemy->set_height(56);
+	enemy->set_width(40*2);
+	enemy->set_height(56*2);
 	enemy->set_bound(1);
 	enemy->setImage(enemy_image);
 	objects.push_back(enemy);
