@@ -169,7 +169,7 @@ int main(int argc, char **argv)
 	al_flip_display();
 
 	//Start playing the music
-	//al_play_sample_instance(bgInstance);
+	al_play_sample_instance(bgInstance);
 
 	al_start_timer(timer); //Start the timer
 
