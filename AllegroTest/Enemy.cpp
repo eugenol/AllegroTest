@@ -6,6 +6,7 @@
 Enemy::Enemy()
 {
 	srand(time(NULL));
+	changeState(IDLING);
 }
 
 
@@ -24,6 +25,25 @@ void Enemy::setImage(ALLEGRO_BITMAP *image)
 void Enemy::changeState(int newState)
 {
 	currState = newState;
+
+	if (currState == IDLING)
+	{ 
+		this->set_x_velocity(1);
+		this->set_y_velocity(1);
+	}
+	else if (currState == CHASING)
+	{
+		this->set_x_velocity(4);
+		this->set_y_velocity(4);
+	}
+	else if (currState == SEARCHING)
+	{
+		this->set_x_velocity(3);
+		this->set_y_velocity(3);
+	}
+	else if (currState == RETREATING)
+	{}
+
 }
 
 void Enemy::Update(Player* player)
@@ -130,6 +150,8 @@ void Enemy::Update(Player* player)
 	{
 		//Not used yet.
 	}
+
+	//Can add for enemy to head in last known direction of player.
 
 	//bounds checking
 	if (this->get_y() <= 0 + this->get_height() / 2 + this->get_bound())
