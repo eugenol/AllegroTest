@@ -11,6 +11,13 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
+	delete sprite;
+}
+
+void Enemy::setImage(ALLEGRO_BITMAP *image)
+{
+	Enemy::image = image;
+	sprite = new Sprite(4, 0, 0, 5, 40, 56, 4, 4, 0, 1, this, image);
 }
 
 void Enemy::changeState(int newState)
@@ -150,6 +157,8 @@ void Enemy::Update(Player* player)
 	//	this->set_x_direction(-1);
 	//}
 	//GameObject::Update(fake_key);
+
+	sprite->Update();
 }
 
 float Enemy::distanceToPlayer(Player* player)
@@ -167,36 +176,11 @@ float Enemy::angleToPlayer(Player* player)
 
 void Enemy::Draw()
 {
-	const float image_width = 40;
-	const float image_height = 56;
-	float start_image_x = 0;
-	float start_image_y = 0;
 
-	//Draw the image. Center it on the x and y coordinates.
-	if (this->get_x_direction() == 0)
-	{
-		start_image_x = 0;
-		start_image_y = 0;
-	}
-	else if (this->get_x_direction() == -1)
-	{
-		start_image_x = 0;
-		start_image_y = 1 * image_height;
-	}
-	else if (this->get_x_direction() == 1)
-	{
-		start_image_x = 0;
-		start_image_y = 2 * image_height;
-	}
-
-	//al_draw_bitmap_region(image, start_image_x, start_image_y, image_width, image_height,
-	//	this->get_x() - image_width / 2, this->get_y() - image_height / 2, 0);
-	
 	// visibility circle
 	al_draw_circle(this->get_x(), this->get_y(), visible_distance, al_map_rgb(255, 0, 255),2);
 
-	al_draw_scaled_bitmap(image, start_image_x, start_image_y, image_width, image_height,
-		this->get_x() - image_width, this->get_y() - image_height, image_width*2, image_height*2, 0);
+	sprite->Draw();
 }
 
 void Enemy::Loiter()

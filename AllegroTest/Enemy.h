@@ -1,9 +1,12 @@
 #pragma once
 #include "GameObject.h"
 #include "Player.h"
+#include "Sprite.h"
+
 class Enemy : public GameObject
 {
 	ALLEGRO_BITMAP *image;
+	Sprite *sprite;
 
 	//For finite state ai
 	const float visible_distance = 200;
@@ -19,7 +22,7 @@ public:
 	Enemy();
 	~Enemy();
 	
-	void setImage(ALLEGRO_BITMAP *image) { Enemy::image = image; }
+	void setImage(ALLEGRO_BITMAP *image);
 	void Update(Player * player);
 	void Draw();
 

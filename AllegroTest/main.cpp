@@ -28,7 +28,6 @@ int main(int argc, char **argv)
 
 	bool game_done = false;
 	bool redraw = false;
-	int framecount =0;
 	bool key[5] = { false, false, false, false, false};
 	srand(time(NULL));
 
@@ -177,7 +176,7 @@ int main(int argc, char **argv)
 	//al_play_sample_instance(bgInstance);//turned off for now.. it can get irritating!!
 
 	//keep track of framerate
-	double old_time = al_get_time();
+	gameTime = al_get_time();
 
 	al_start_timer(timer); //Start the timer
 
@@ -189,6 +188,14 @@ int main(int argc, char **argv)
 
 		if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
+			frames++;
+			if (al_current_time() - gameTime >= 1)
+			{
+				gameTime = al_current_time();
+				gameFPS = frames;
+				frames = 0;
+			}
+
 			redraw = true;
 	
 			//al_get_keyboard_state();
@@ -256,11 +263,6 @@ int main(int argc, char **argv)
 		{
 			redraw = false;
 
-			double new_time = al_get_time();
-			double delta = new_time - old_time;
-			float fps = 1 /(float) (delta);
-			old_time = new_time;
-
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			///using a bitmap as a background kills the framerate. Draw lines to see motion effect.
 			for (int i = 0; i < 100; i++)
@@ -273,7 +275,7 @@ int main(int argc, char **argv)
 				(*iter)->Draw();
 
 			al_draw_text(font_pirulen_24, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, 10, ALLEGRO_ALIGN_CENTER, "IRON MAN vs. HULK");
-			al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), SCREEN_WIDTH/2 + cameraPosition[0] ,30, ALLEGRO_ALIGN_CENTER, "%0.0f fps", fps);
+			al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), SCREEN_WIDTH/2 + cameraPosition[0] ,30, ALLEGRO_ALIGN_CENTER, "%i fps", gameFPS);
 			al_flip_display();
 		}
 	}
