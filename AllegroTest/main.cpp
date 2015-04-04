@@ -95,8 +95,6 @@ int main(int argc, char **argv)
 	player->set_height(48*2);
 	player->set_bound(1);
 	player->setImage(player_image);
-	player->setFrameColumn(0);
-	player->setFrameRow(0);
 	objects.push_back(player);
 
 	enemy = new Enemy;

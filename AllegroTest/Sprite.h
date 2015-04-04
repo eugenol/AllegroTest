@@ -14,13 +14,13 @@ private:
 	int animationRows;
 	int curRow;
 	int animationDirection;
-	int scale;
+	int scaleFactor;
 	
 	GameObject *owner;
 	ALLEGRO_BITMAP *image;
 public:
 	Sprite(int maxFrame, int curFrame, int frameCount, int frameDelay, int frameWidth, int frameHeight, int animationColumns,
-		int animationRows, int curRow, int animationDirection, GameObject *owner, ALLEGRO_BITMAP *image);
+		int animationRows, int curRow, int animationDirection, GameObject *owner, ALLEGRO_BITMAP *image, int scaleFactor = 1);
 	~Sprite();
 
 	void Update();

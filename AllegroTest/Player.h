@@ -1,17 +1,17 @@
 #pragma once
 #include "GameObject.h"
+#include "Sprite.h"
+
 class Player : public GameObject
 {
 	ALLEGRO_BITMAP *image;
-	int currframeRow;
-	int currframeCol;
+	Sprite *sprite;
+
 public:
 	Player();
 	~Player();
 
-	void setImage(ALLEGRO_BITMAP *image) { Player::image = image; }
-	void setFrameRow(int row) {currframeRow = row;}
-	void setFrameColumn(int column) { currframeCol = column;}
+	void setImage(ALLEGRO_BITMAP *image);
 	void Update(const bool *key);
 	void Draw();
 

@@ -16,8 +16,9 @@ Enemy::~Enemy()
 
 void Enemy::setImage(ALLEGRO_BITMAP *image)
 {
+	//Move this to the constructor
 	Enemy::image = image;
-	sprite = new Sprite(4, 0, 0, 5, 40, 56, 4, 4, 0, 1, this, image);
+	sprite = new Sprite(4, 0, 0, 5, 40, 56, 4, 4, 0, 1, this, image,2);
 }
 
 void Enemy::changeState(int newState)
@@ -104,7 +105,7 @@ void Enemy::Update(Player* player)
 			last_player_x = player->get_x();
 			last_player_y = player->get_y();
 		}
-		else if (sqrt(pow(deltax, 2) + pow(deltay, 2)) > 60)
+		else if (sqrt(pow(deltax, 2) + pow(deltay, 2)) > 50)
 		{
 			//if enemy just lost sight of the player, move in last known direction
 			float angle = atan2(deltay, deltax);
@@ -177,9 +178,14 @@ float Enemy::angleToPlayer(Player* player)
 void Enemy::Draw()
 {
 
-	// visibility circle
+	// field of view circle
 	al_draw_circle(this->get_x(), this->get_y(), visible_distance, al_map_rgb(255, 0, 255),2);
 
+	//Player Last seen position
+	al_draw_circle(last_player_x, last_player_y, 50, al_map_rgb(255, 0, 0),2);
+	al_draw_filled_circle(last_player_x, last_player_y, 2, al_map_rgb(255, 0, 0));
+
+	//Draw sprite
 	sprite->Draw();
 }
 

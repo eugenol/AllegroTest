@@ -2,7 +2,7 @@
 
 
 Sprite::Sprite(int maxFrame, int curFrame, int frameCount, int frameDelay, int frameWidth, int frameHeight, int animationColumns,
-	int animationRows, int curRow, int animationDirection, GameObject *owner, ALLEGRO_BITMAP *image)
+	int animationRows, int curRow, int animationDirection, GameObject *owner, ALLEGRO_BITMAP *image, int scaleFactor)
 {
 	Sprite::maxFrame = maxFrame;
 	Sprite::curFrame = curFrame;
@@ -17,6 +17,7 @@ Sprite::Sprite(int maxFrame, int curFrame, int frameCount, int frameDelay, int f
 
 	Sprite::owner = owner;
 	Sprite::image = image;
+	Sprite::scaleFactor = scaleFactor;
 }
 
 Sprite::~Sprite()
@@ -55,5 +56,6 @@ void Sprite::Draw()
 	//al_draw_bitmap_region(image, curFrame*frameWidth, curRow*frameHeight, frameWidth, frameHeight, owner->get_x(), owner->get_x(), 0);
 
 	al_draw_scaled_bitmap(image, curFrame*frameWidth, curRow*frameHeight, frameWidth, frameHeight,
-		owner->get_x() - frameWidth, owner->get_x() - frameHeight, frameWidth * 2, frameHeight * 2, 0);
+		owner->get_x() - frameWidth / 2 * scaleFactor, owner->get_y() - frameHeight / 2 * scaleFactor,
+		frameWidth*scaleFactor, frameHeight*scaleFactor, 0);
 }
