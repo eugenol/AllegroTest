@@ -38,8 +38,8 @@ void Enemy::changeState(int newState)
 	}
 	else if (currState == SEARCHING)
 	{
-		this->set_x_velocity(3);
-		this->set_y_velocity(3);
+		this->set_x_velocity(2);
+		this->set_y_velocity(2);
 	}
 	else if (currState == RETREATING)
 	{}
