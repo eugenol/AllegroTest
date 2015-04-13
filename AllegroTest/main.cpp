@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 	al_flip_display();
 
 	//Start playing the music
-	al_play_sample_instance(bgInstance);//turned off for now.. it can get irritating!!
+	//al_play_sample_instance(bgInstance);//turned off for now.. it can get irritating!!
 
 	//keep track of framerate
 	gameTime = al_get_time();
@@ -203,7 +203,7 @@ int main(int argc, char **argv)
 
 			cameraUpdate(cameraPosition, player->get_x(), player->get_y(), player->get_width(), player->get_height());
 			al_identity_transform(&camera);
-			al_translate_transform(&camera, -cameraPosition[0], 0);
+			al_translate_transform(&camera, -cameraPosition[0], -cameraPosition[1]);
 			al_use_transform(&camera);
 		}
 
@@ -301,8 +301,10 @@ void cameraUpdate(float *cameraPosition, float x, float y, int width, int height
 	cameraPosition[0] = -(SCREEN_WIDTH / 2) + (x /*+ width/2*/);
 	cameraPosition[1] = -(SCREEN_HEIGHT / 2) + (y /*+ height/2*/);
 
-	if (cameraPosition[0] < 0)
-		cameraPosition[0] = 0;
-	if (cameraPosition[1] < 0)
-		cameraPosition[1] = 0;
+	if (cameraPosition[0] < -800)
+		cameraPosition[0] = -800;
+	if (cameraPosition[0] > 1600)
+		cameraPosition[0] = 1600;
+	if (cameraPosition[1] > 1200)
+		cameraPosition[1] = 1200;
 }
