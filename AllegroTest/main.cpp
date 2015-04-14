@@ -263,8 +263,8 @@ int main(int argc, char **argv)
 
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			///using a bitmap as a background kills the framerate. Draw lines to see motion effect.
-			for (int i = 0; i < 100; i++)
-				al_draw_line(i*75, 0, i*75, SCREEN_HEIGHT, al_map_rgb(255, 0, 255), 2);
+			for (int i = -100; i < 100; i++)
+				al_draw_line(i*75, -600, i*75, 1200, al_map_rgb(255, 0, 255), 2);
 			//al_draw_filled_rectangle(0, 0, 1200, 600, al_map_rgb(255, 0, 255));
 			//al_draw_bitmap(background, 0, 0, NULL);
 			//al_draw_bitmap(background, 1067, 0, NULL);
@@ -301,10 +301,12 @@ void cameraUpdate(float *cameraPosition, float x, float y, int width, int height
 	cameraPosition[0] = -(SCREEN_WIDTH / 2) + (x /*+ width/2*/);
 	cameraPosition[1] = -(SCREEN_HEIGHT / 2) + (y /*+ height/2*/);
 
-	if (cameraPosition[0] < -800)
-		cameraPosition[0] = -800;
-	if (cameraPosition[0] > 1600)
-		cameraPosition[0] = 1600;
-	if (cameraPosition[1] > 1200)
-		cameraPosition[1] = 1200;
+	//if (cameraPosition[0] < -800)
+	//	cameraPosition[0] = -800;
+	//if (cameraPosition[0] > 1600)
+	//	cameraPosition[0] = 1600;
+	//if (cameraPosition[1] < -600)
+	//	cameraPosition[1] = 600;
+	//if (cameraPosition[1] > 1200)
+	//	cameraPosition[1] = 1200;
 }
