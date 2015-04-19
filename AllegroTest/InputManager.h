@@ -4,10 +4,17 @@
 
 class InputManager
 {
+private:
+	ALLEGRO_KEYBOARD_STATE keyState;
 public:
 	InputManager();
 	~InputManager();
 
-	bool isKeyPressed();
+	void Update();
+
+	bool IsKeyPressed(ALLEGRO_EVENT ev, int key);
+	bool IsKeyReleased(ALLEGRO_EVENT ev, int key);
+
+	bool IsKeyDown(int key);
 };
 

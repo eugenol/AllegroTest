@@ -62,7 +62,7 @@ public:
 	int get_y_direction() { return direction_y; }
 	void set_y_direction(int direction_y) { GameObject::direction_y = direction_y; }
 
-	virtual void Update(const bool *key);
+	virtual void Update(ALLEGRO_EVENT ev);
 
 	virtual void Draw() = 0;
 

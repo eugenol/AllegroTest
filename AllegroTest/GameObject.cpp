@@ -10,7 +10,7 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::Update(const bool *key)
+void GameObject::Update(ALLEGRO_EVENT ev)
 {
 	//bounds checking
 	if (y <= MIN_HEIGHT + height/2+bound)

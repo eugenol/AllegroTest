@@ -37,9 +37,9 @@ void Sprite::Update()
 		frameCount = 0;
 	}
 
-	if (owner->get_x_direction() == 0)
+	if (owner->get_y_direction() == 1)
 	{
-		curRow = 0;
+		curRow = 3;
 	}
 	else if (owner->get_x_direction() == -1)
 	{
@@ -49,6 +49,12 @@ void Sprite::Update()
 	{
 		curRow = 2;
 	}
+	else if (owner->get_y_direction() == -1)
+	{
+		curRow = 0;
+	}
+	else
+		curRow = 0;
 }
 
 void Sprite::Draw()

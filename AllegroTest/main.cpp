@@ -198,8 +198,8 @@ int main(int argc, char **argv)
 	
 			//al_get_keyboard_state();
 			
-			player->Update(key);
-			enemy->Update(player);
+			player->Update(ev);
+			enemy->Update(player, ev);
 
 			cameraUpdate(cameraPosition, player->get_x(), player->get_y(), player->get_width(), player->get_height());
 			al_identity_transform(&camera);
@@ -207,53 +207,6 @@ int main(int argc, char **argv)
 			al_use_transform(&camera);
 		}
 
-		if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
-		{
-			switch (ev.keyboard.keycode)
-			{
-				case ALLEGRO_KEY_UP:
-					key[KEY_UP] = true;
-					break;
-				case ALLEGRO_KEY_DOWN:
-					key[KEY_DOWN] = true;
-					break;
-				case ALLEGRO_KEY_LEFT:
-					key[KEY_LEFT] = true;
-					break;
-				case ALLEGRO_KEY_RIGHT:
-					key[KEY_RIGHT] = true;
-					break;
-				case ALLEGRO_KEY_SPACE:
-					key[KEY_SPACE] = true;
-					break;
-			}
-		}
-
-		if (ev.type == ALLEGRO_EVENT_KEY_UP)
-		{
-			switch (ev.keyboard.keycode)
-			{
-			case ALLEGRO_KEY_UP:
-				key[KEY_UP] = false;
-				break;
-			case ALLEGRO_KEY_DOWN:
-				key[KEY_DOWN] = false;
-				break;
-			case ALLEGRO_KEY_LEFT:
-				key[KEY_LEFT] = false;
-				break;
-			case ALLEGRO_KEY_RIGHT:
-				key[KEY_RIGHT] = false;
-				break;
-			case ALLEGRO_KEY_SPACE:
-				key[KEY_SPACE] = false;
-				break;
-
-			case ALLEGRO_KEY_ESCAPE:
-				game_done=true;
-				break;
-			}
-		}
 		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 			game_done = true;
 

@@ -46,7 +46,7 @@ void Enemy::changeState(int newState)
 
 }
 
-void Enemy::Update(Player* player)
+void Enemy::Update(Player* player, ALLEGRO_EVENT ev)
 {
 	if (currState == IDLING)
 	{
@@ -153,33 +153,8 @@ void Enemy::Update(Player* player)
 
 	//Can add for enemy to head in last known direction of player.
 
-	//bounds checking
-	if (this->get_y() <= MIN_HEIGHT + this->get_height() / 2 + this->get_bound())
-	{
-		this->set_y(MIN_HEIGHT + this->get_height() / 2 + this->get_bound());
-		this->set_y_direction(1);
-	}
-
-	//Fixed so that their feet toughes the ground
-	if (this->get_y() >= MAX_HEIGHT - (this->get_height() / 2 - 2))
-	{
-		this->set_y(MAX_HEIGHT - (this->get_height() / 2 - 2));
-		this->set_y_direction(-1);
-	}
-
-	if (this->get_x() <= MIN_WIDTH + this->get_width() / 2 + this->get_bound())
-	{
-		this->set_x(MIN_WIDTH + this->get_width() / 2 + this->get_bound());
-		this->set_x_direction(1);
-	}
-
-	//No bound on leaving the screen
-	if (this->get_x() >= MAX_WIDTH - (0 + this->get_width() / 2 + this->get_bound()))
-	{
-		this->set_x(MAX_WIDTH - (0 + this->get_width() / 2 + this->get_bound()));
-		this->set_x_direction(-1);
-	}
-	//GameObject::Update(fake_key);
+	
+	GameObject::Update(ev);
 
 	sprite->Update();
 }

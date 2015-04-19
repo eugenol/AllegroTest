@@ -23,7 +23,7 @@ public:
 	~Enemy();
 	
 	void setImage(ALLEGRO_BITMAP *image);
-	void Update(Player * player);
+	void Update(Player * player, ALLEGRO_EVENT ev);
 	void Draw();
 
 

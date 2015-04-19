@@ -18,8 +18,10 @@ void Player::setImage(ALLEGRO_BITMAP *image)
 	sprite = new Sprite(4, 0, 0, 5, 32, 48, 4, 4, 0, 1, this, image, 2);
 }
 
-void Player::Update(const bool *key)
+void Player::Update(ALLEGRO_EVENT ev)
 {
+	input.Update();
+
 	this->set_y_direction(0);
 	this->set_x_direction(0);
 	float x, y, velx, vely;
@@ -33,24 +35,24 @@ void Player::Update(const bool *key)
 	diry = this->get_y_direction();
 
 	//update position
-	if (key[KEY_UP])
+	if (input.IsKeyDown(ALLEGRO_KEY_UP))
 	{
 		y -= vely;
 		diry = 1;
 	}
-	if (key[KEY_DOWN])
+	if (input.IsKeyDown(ALLEGRO_KEY_DOWN))
 	{
 		y += vely;
 		diry = -1;
 	}
 
-	if (key[KEY_LEFT])
+	if (input.IsKeyDown(ALLEGRO_KEY_LEFT))
 	{
 		x -= velx;
 		dirx = -1;
 	}
 
-	if (key[KEY_RIGHT])
+	if (input.IsKeyDown(ALLEGRO_KEY_RIGHT))
 	{
 		x += velx;
 		dirx = +1;
@@ -61,7 +63,7 @@ void Player::Update(const bool *key)
 	this->set_x_direction(dirx);
 	this->set_y_direction(diry);
 
-	GameObject::Update(key);
+	GameObject::Update(ev);
 	sprite->Update();
 }
 
