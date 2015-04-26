@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 	al_flip_display();
 
 	//Start playing the music
-	//al_play_sample_instance(bgInstance);//turned off for now.. it can get irritating!!
+	al_play_sample_instance(bgInstance);//turned off for now.. it can get irritating!!
 
 	//keep track of framerate
 	gameTime = al_get_time();
