@@ -63,7 +63,7 @@ void Player::Update(ALLEGRO_EVENT ev)
 	this->set_x_direction(dirx);
 	this->set_y_direction(diry);
 
-	GameObject::Update(ev);
+	GameObject::Update();
 	sprite->Update();
 }
 

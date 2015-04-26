@@ -210,6 +210,9 @@ int main(int argc, char **argv)
 		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 			game_done = true;
 
+		if (ev.type == ALLEGRO_EVENT_KEY_DOWN || ev.type == ALLEGRO_EVENT_KEY_UP)
+
+
 		if (redraw && al_is_event_queue_empty(event_queue)) //have to wait until event queue is empty befor redrawing.
 		{
 			redraw = false;
