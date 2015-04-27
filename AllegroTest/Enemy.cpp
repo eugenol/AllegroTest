@@ -154,7 +154,7 @@ void Enemy::Update(Player* player)
 	//Can add for enemy to head in last known direction of player.
 
 	bool fake_key[5] = { false, false, false, false, false };
-	
+
 	GameObject::Update(fake_key);
 
 	sprite->Update();
@@ -195,7 +195,7 @@ void Enemy::Loiter()
 
 	//Choose new direction
 
-	if (rand() % 2 == 0)
+	if (rand() % 80 == 0)
 	{
 		switch (rand() % 2)
 		{

@@ -1,8 +1,13 @@
 # AllegroTest
 Playing around with allegro
 
-The settings are set, you just need to set an environmental variable on your computer.
-extract the allegro binaries somewhere. open command prompt and type setx ALLEGRO C:\Wherever ... replacing Wherever with the actual path for allegro
+Settings found here:
+https://wiki.allegro.cc/index.php?title=Windows,_Visual_Studio_2010_and_Allegro_5
+
+
+make sure to set this in environment in debugging, for the debug version
+
+PATH=c:\allegro\bin;%PATH%
 
 if you get a font error, copy the font to the directory that the executable is in (i.e the debug or release folder)
 if you get an image error, copy the image to the directory that the executable is in (i.e the debug or release folder)
