@@ -28,25 +28,25 @@ void Enemy::changeState(int newState)
 
 	if (currState == IDLING)
 	{ 
-		this->set_x_velocity(1);
-		this->set_y_velocity(1);
+		set_x_velocity(1);
+		set_y_velocity(1);
 	}
 	else if (currState == CHASING)
 	{
-		this->set_x_velocity(4);
-		this->set_y_velocity(4);
+		set_x_velocity(4);
+		set_y_velocity(4);
 	}
 	else if (currState == SEARCHING)
 	{
-		this->set_x_velocity(2);
-		this->set_y_velocity(2);
+		set_x_velocity(2);
+		set_y_velocity(2);
 	}
 	else if (currState == RETREATING)
 	{}
 
 }
 
-void Enemy::Update(Player* player, ALLEGRO_EVENT ev)
+void Enemy::Update(Player* player)
 {
 	if (currState == IDLING)
 	{
@@ -56,10 +56,10 @@ void Enemy::Update(Player* player, ALLEGRO_EVENT ev)
 
 			int y_direction = sin(angleToPlayer(player)) < 0 ? -1 : 1;
 			int x_direction = cos(angleToPlayer(player)) < 0 ? -1 : 1;
-			this->set_y_direction(y_direction);
-			this->set_x_direction(x_direction);
-			this->set_x(this->get_x() + this->get_x_velocity()*this->get_x_direction());
-			this->set_y(this->get_y() + this->get_y_velocity()*this->get_y_direction());
+			set_y_direction(y_direction);
+			set_x_direction(x_direction);
+			set_x(get_x() + get_x_velocity()*get_x_direction());
+			set_y(get_y() + get_y_velocity()*get_y_direction());
 
 			last_player_x = player->get_x();
 			last_player_y = player->get_y();
@@ -82,10 +82,10 @@ void Enemy::Update(Player* player, ALLEGRO_EVENT ev)
 
 			int y_direction = sin(angle) < 0 ? -1 : 1;
 			int x_direction = cos(angle) < 0 ? -1 : 1;
-			this->set_y_direction(y_direction);
-			this->set_x_direction(x_direction);
-			this->set_x(this->get_x() + this->get_x_velocity()*this->get_x_direction());
-			this->set_y(this->get_y() + this->get_y_velocity()*this->get_y_direction());
+			set_y_direction(y_direction);
+			set_x_direction(x_direction);
+			set_x(get_x() + get_x_velocity()*get_x_direction());
+			set_y(get_y() + get_y_velocity()*get_y_direction());
 
 			//if the player is in sight again, start chasing him
 			if (visible_distance > distanceToPlayer(player))
@@ -96,10 +96,10 @@ void Enemy::Update(Player* player, ALLEGRO_EVENT ev)
 			//Move in direction of player
 			int y_direction = sin(angleToPlayer(player)) < 0 ? -1 : 1;
 			int x_direction = cos(angleToPlayer(player)) < 0 ? -1 : 1;
-			this->set_y_direction(y_direction);
-			this->set_x_direction(x_direction);
-			this->set_x(this->get_x() + this->get_x_velocity()*this->get_x_direction());
-			this->set_y(this->get_y() + this->get_y_velocity()*this->get_y_direction());
+			set_y_direction(y_direction);
+			set_x_direction(x_direction);
+			set_x(get_x() + get_x_velocity()*get_x_direction());
+			set_y(get_y() + get_y_velocity()*get_y_direction());
 
 			last_player_x = player->get_x();
 			last_player_y = player->get_y();
@@ -117,10 +117,10 @@ void Enemy::Update(Player* player, ALLEGRO_EVENT ev)
 
 			int y_direction = sin(angleToPlayer(player)) < 0 ? -1 : 1;
 			int x_direction = cos(angleToPlayer(player)) < 0 ? -1 : 1;
-			this->set_y_direction(y_direction);
-			this->set_x_direction(x_direction);
-			this->set_x(this->get_x() + this->get_x_velocity()*this->get_x_direction());
-			this->set_y(this->get_y() + this->get_y_velocity()*this->get_y_direction());
+			set_y_direction(y_direction);
+			set_x_direction(x_direction);
+			set_x(get_x() + get_x_velocity()*get_x_direction());
+			set_y(get_y() + get_y_velocity()*get_y_direction());
 
 			last_player_x = player->get_x();
 			last_player_y = player->get_y();
@@ -132,10 +132,10 @@ void Enemy::Update(Player* player, ALLEGRO_EVENT ev)
 
 			int y_direction = sin(angle) < 0 ? -1 : 1;
 			int x_direction = cos(angle) < 0 ? -1 : 1;
-			this->set_y_direction(y_direction);
-			this->set_x_direction(x_direction);
-			this->set_x(this->get_x() + this->get_x_velocity()*this->get_x_direction());
-			this->set_y(this->get_y() + this->get_y_velocity()*this->get_y_direction());
+			set_y_direction(y_direction);
+			set_x_direction(x_direction);
+			set_x(get_x() + get_x_velocity()*get_x_direction());
+			set_y(get_y() + get_y_velocity()*get_y_direction());
 
 			if (visible_distance > distanceToPlayer(player))
 				changeState(CHASING);
@@ -153,8 +153,9 @@ void Enemy::Update(Player* player, ALLEGRO_EVENT ev)
 
 	//Can add for enemy to head in last known direction of player.
 
+	bool fake_key[5] = { false, false, false, false, false };
 	
-	GameObject::Update(ev);
+	GameObject::Update(fake_key);
 
 	sprite->Update();
 }
@@ -176,7 +177,7 @@ void Enemy::Draw()
 {
 
 	// field of view circle
-	al_draw_circle(this->get_x(), this->get_y(), visible_distance, al_map_rgb(255, 0, 255),2);
+	al_draw_circle(get_x(), get_y(), visible_distance, al_map_rgb(255, 0, 255),2);
 
 	//Player Last seen position
 	al_draw_circle(last_player_x, last_player_y, 50, al_map_rgb(255, 0, 0),2);
@@ -189,12 +190,12 @@ void Enemy::Draw()
 void Enemy::Loiter()
 {
 	// Move
-	this->set_y(this->get_y() + this->get_y_velocity()*this->get_y_direction());
-	this->set_x(this->get_x() + this->get_x_velocity()*this->get_x_direction());
+	set_y(get_y() + get_y_velocity()*get_y_direction());
+	set_x(get_x() + get_x_velocity()*get_x_direction());
 
 	//Choose new direction
 
-	if (rand() % 80 == 0)
+	if (rand() % 2 == 0)
 	{
 		switch (rand() % 2)
 		{
@@ -203,13 +204,13 @@ void Enemy::Loiter()
 			switch (rand() % 3)
 			{
 			case 0:
-				this->set_y_direction(-1);
+				set_y_direction(-1);
 				break;
 			case 1:
-				this->set_y_direction(+1);
+				set_y_direction(+1);
 				break;
 			case 2:
-				this->set_x_direction(0);
+				set_x_direction(0);
 				break;
 			}
 		}
@@ -219,13 +220,13 @@ void Enemy::Loiter()
 			switch (rand() % 3)
 			{
 			case 0:
-				this->set_x_direction(-1);
+				set_x_direction(-1);
 				break;
 			case 1:
-				this->set_x_direction(+1);
+				set_x_direction(+1);
 				break;
 			case 2:
-				this->set_x_direction(0);
+				set_x_direction(0);
 				break;
 			}
 		}

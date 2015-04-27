@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 	al_flip_display();
 
 	//Start playing the music
-	al_play_sample_instance(bgInstance);//turned off for now.. it can get irritating!!
+	//al_play_sample_instance(bgInstance);//turned off for now.. it can get irritating!!
 
 	//keep track of framerate
 	gameTime = al_get_time();
@@ -198,8 +198,8 @@ int main(int argc, char **argv)
 	
 			//al_get_keyboard_state();
 			
-			player->Update(ev);
-			enemy->Update(player, ev);
+			player->Update(key);
+			enemy->Update(player);
 
 			cameraUpdate(cameraPosition, player->get_x(), player->get_y(), player->get_width(), player->get_height());
 			al_identity_transform(&camera);
@@ -210,7 +210,53 @@ int main(int argc, char **argv)
 		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 			game_done = true;
 
-		if (ev.type == ALLEGRO_EVENT_KEY_DOWN || ev.type == ALLEGRO_EVENT_KEY_UP)
+		if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
+		{
+			if (ev.keyboard.keycode == ALLEGRO_KEY_UP)
+			{
+				key[0] = true;
+			}
+			if (ev.keyboard.keycode == ALLEGRO_KEY_DOWN)
+			{
+				key[1] = true;
+			}
+			if (ev.keyboard.keycode == ALLEGRO_KEY_LEFT)
+			{
+				key[2] = true;
+			}
+			if (ev.keyboard.keycode == ALLEGRO_KEY_RIGHT)
+			{
+				key[3] = true;
+			}
+			if (ev.keyboard.keycode == ALLEGRO_KEY_SPACE)
+			{
+				key[4] = true;
+			}
+		}
+
+		if (ev.type == ALLEGRO_EVENT_KEY_UP)
+		{
+			if (ev.keyboard.keycode == ALLEGRO_KEY_UP)
+			{
+				key[0] = false;
+			}
+			if (ev.keyboard.keycode == ALLEGRO_KEY_DOWN)
+			{
+				key[1] = false;
+			}
+			if (ev.keyboard.keycode == ALLEGRO_KEY_LEFT)
+			{
+				key[2] = false;
+			}
+			if (ev.keyboard.keycode == ALLEGRO_KEY_RIGHT)
+			{
+				key[3] = false;
+			}
+			if (ev.keyboard.keycode == ALLEGRO_KEY_SPACE)
+			{
+				key[4] = false;
+			}
+		}
 
 
 		if (redraw && al_is_event_queue_empty(event_queue)) //have to wait until event queue is empty befor redrawing.

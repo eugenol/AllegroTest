@@ -15,6 +15,7 @@ private:
 	int curRow;
 	int animationDirection;
 	int scaleFactor;
+	bool isIdle;
 	
 	GameObject *owner;
 	ALLEGRO_BITMAP *image;

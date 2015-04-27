@@ -10,7 +10,7 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::Update(ALLEGRO_EVENT ev)
+void GameObject::Update(const bool key[])
 {
 	direction_y = 0;
 	direction_x = 0;
