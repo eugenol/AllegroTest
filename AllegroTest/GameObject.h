@@ -22,6 +22,7 @@ enum KEYS{ KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE };
 
 class GameObject
 {
+protected:
 	float x;
 	float y;
 	float height;
@@ -66,9 +67,9 @@ public:
 
 	virtual void Draw() = 0;
 
-	//bool CheckCollision(GameObject *otherObject);
-	//void virtual Collided(int objectID);
-	//bool Collidable();
+	bool CheckCollision(GameObject *otherObject);
+	void virtual Collided(int objectID);
+	bool Collidable();
 
 };
 

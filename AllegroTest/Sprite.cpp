@@ -55,6 +55,15 @@ void Sprite::Update()
 	}
 	else
 		curRow = 0;
+
+	if (owner->get_y_direction() == 0 && owner->get_x_direction() == 0)
+	{
+		isIdle = true;
+		curFrame = 0;
+
+	}
+	else
+		isIdle = false;
 }
 
 void Sprite::Draw()
