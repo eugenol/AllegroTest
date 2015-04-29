@@ -201,8 +201,10 @@ int main(int argc, char **argv)
 	
 			//al_get_keyboard_state();
 			
-			player->Update();
-			enemy->Update(/*player*/);
+			//player->Update();
+			//enemy->Update(/*player*/);
+			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
+				(*iter)->Update();
 
 			cameraUpdate(cameraPosition, player->get_x(), player->get_y(), player->get_width(), player->get_height());
 			al_identity_transform(&camera);
