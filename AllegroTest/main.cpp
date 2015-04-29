@@ -109,6 +109,8 @@ int main(int argc, char **argv)
 	enemy->setImage(enemy_image);
 	objects.push_back(enemy);
 
+	Enemy::getPlayer(player);
+
 	//Sounds & Musics
 	al_reserve_samples(1);
 	bg_music = al_load_sample("A Night of Dizzy Spells.ogg");
@@ -200,7 +202,7 @@ int main(int argc, char **argv)
 			//al_get_keyboard_state();
 			
 			player->Update();
-			enemy->Update(player);
+			enemy->Update(/*player*/);
 
 			cameraUpdate(cameraPosition, player->get_x(), player->get_y(), player->get_width(), player->get_height());
 			al_identity_transform(&camera);

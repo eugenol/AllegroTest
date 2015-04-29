@@ -1,7 +1,12 @@
 #include "Enemy.h"
 #include <math.h>
 
+Player * Enemy::m_player = NULL;
 
+void Enemy::getPlayer(Player *player)
+{
+	m_player = player;
+}
 
 Enemy::Enemy()
 {
@@ -46,8 +51,9 @@ void Enemy::changeState(int newState)
 
 }
 
-void Enemy::Update(Player* player)
+void Enemy::Update(/*Player* player*/)
 {
+	Player *player = m_player;
 	if (currState == IDLING)
 	{
 		if (visible_distance > distanceToPlayer(player))
@@ -152,8 +158,6 @@ void Enemy::Update(Player* player)
 	}
 
 	//Can add for enemy to head in last known direction of player.
-
-	bool fake_key[5] = { false, false, false, false, false };
 
 	GameObject::Update();
 

@@ -5,6 +5,7 @@
 
 class Enemy : public GameObject
 {
+protected:
 	ALLEGRO_BITMAP *image;
 	Sprite *sprite;
 
@@ -18,14 +19,13 @@ class Enemy : public GameObject
 	float last_player_x;
 	float last_player_y;
 	void Loiter();
+	static Player *m_player;
 public:
 	Enemy();
 	~Enemy();
 	
 	void setImage(ALLEGRO_BITMAP *image);
-	void Update(Player * player);
+	void Update(/*Player * player*/);
 	void Draw();
-
-
+	static void getPlayer(Player *player);
 };
-
