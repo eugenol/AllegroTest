@@ -155,7 +155,7 @@ void Enemy::Update(Player* player)
 
 	bool fake_key[5] = { false, false, false, false, false };
 
-	GameObject::Update(fake_key);
+	GameObject::Update();
 
 	sprite->Update();
 }

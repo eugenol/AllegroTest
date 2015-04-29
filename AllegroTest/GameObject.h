@@ -18,7 +18,6 @@ const int MIN_WIDTH = -800;
 const int MAX_WIDTH =1600;
 
 const float FPS = 60;
-enum KEYS{ KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE };
 
 class GameObject
 {
@@ -63,13 +62,13 @@ public:
 	int get_y_direction() { return direction_y; }
 	void set_y_direction(int direction_y) { GameObject::direction_y = direction_y; }
 
-	virtual void Update(const bool key[]);
+	virtual void Update();
 
 	virtual void Draw() = 0;
 
-	bool CheckCollision(GameObject *otherObject);
-	void virtual Collided(int objectID);
-	bool Collidable();
+	//bool CheckCollision(GameObject *otherObject);
+	//void virtual Collided(int objectID);
+	//bool Collidable();
 
 };
 

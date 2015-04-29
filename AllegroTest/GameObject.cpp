@@ -10,7 +10,7 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::Update(const bool key[])
+void GameObject::Update()
 {
 	//bounds checking
 	if (y <= MIN_HEIGHT + height/2+bound)

@@ -15,6 +15,7 @@
 #include "GameObject.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "InputManager.h"
 
 void cameraUpdate(float *cameraPosition, float x, float y, int width, int height);
 
@@ -198,7 +199,7 @@ int main(int argc, char **argv)
 	
 			//al_get_keyboard_state();
 			
-			player->Update(key);
+			player->Update();
 			enemy->Update(player);
 
 			cameraUpdate(cameraPosition, player->get_x(), player->get_y(), player->get_width(), player->get_height());
@@ -210,53 +211,12 @@ int main(int argc, char **argv)
 		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 			game_done = true;
 
-		if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
-		{
-			if (ev.keyboard.keycode == ALLEGRO_KEY_UP)
-			{
-				key[0] = true;
-			}
-			if (ev.keyboard.keycode == ALLEGRO_KEY_DOWN)
-			{
-				key[1] = true;
-			}
-			if (ev.keyboard.keycode == ALLEGRO_KEY_LEFT)
-			{
-				key[2] = true;
-			}
-			if (ev.keyboard.keycode == ALLEGRO_KEY_RIGHT)
-			{
-				key[3] = true;
-			}
-			if (ev.keyboard.keycode == ALLEGRO_KEY_SPACE)
-			{
-				key[4] = true;
-			}
-		}
+		//Capture key input
+		InputManager::getInstance().getInput(ev);
 
-		if (ev.type == ALLEGRO_EVENT_KEY_UP)
-		{
-			if (ev.keyboard.keycode == ALLEGRO_KEY_UP)
-			{
-				key[0] = false;
-			}
-			if (ev.keyboard.keycode == ALLEGRO_KEY_DOWN)
-			{
-				key[1] = false;
-			}
-			if (ev.keyboard.keycode == ALLEGRO_KEY_LEFT)
-			{
-				key[2] = false;
-			}
-			if (ev.keyboard.keycode == ALLEGRO_KEY_RIGHT)
-			{
-				key[3] = false;
-			}
-			if (ev.keyboard.keycode == ALLEGRO_KEY_SPACE)
-			{
-				key[4] = false;
-			}
-		}
+		//Escape key pressed? exit game
+		if (InputManager::getInstance().isKeyPressed(ESCAPE))
+			game_done = true;
 
 
 		if (redraw && al_is_event_queue_empty(event_queue)) //have to wait until event queue is empty befor redrawing.
