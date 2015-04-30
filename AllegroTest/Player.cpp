@@ -1,9 +1,10 @@
 #include "Player.h"
 
 
-Player::Player()
+Player::Player(float x, float y, float velocity_x, float velocity_y, float height, float width, float bound, ALLEGRO_BITMAP *image)
+	: GameObject(x, y, velocity_x, velocity_y, height, width, bound, PLAYER, image)
 {
-	ID = PLAYER;
+	setImage(image);
 }
 
 
@@ -14,8 +15,6 @@ Player::~Player()
 
 void Player::setImage(ALLEGRO_BITMAP *image)
 {
-	//Move this to the constructor
-	Player::image = image; 
 	sprite = new Sprite(4, 0, 0, 5, 32, 48, 4, 4, 0, 1, this, image, 2);
 }
 

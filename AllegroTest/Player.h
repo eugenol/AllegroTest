@@ -5,16 +5,15 @@
 
 class Player : public GameObject
 {
-	ALLEGRO_BITMAP *image;
+private:
 	Sprite *sprite;
-
 public:
-	Player();
+	Player(float x, float y, float velocity_x, float velocity_y, float height, float width, float bound, ALLEGRO_BITMAP *image);
 	~Player();
 
-	void setImage(ALLEGRO_BITMAP *image);
-	void Update();
-	void Draw();
+	virtual void setImage(ALLEGRO_BITMAP *image);
+	virtual void Update();
+	virtual void Draw();
 
 };
 

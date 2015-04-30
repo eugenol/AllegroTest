@@ -10,6 +10,8 @@
 #include <ctime>
 #include <cmath>
 
+//#include "Sprite.h"
+
 //Consts
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -33,9 +35,11 @@ protected:
 	int direction_x;
 	int direction_y;	
 	int ID;
+	ALLEGRO_BITMAP *image;
+	//Sprite *sprite;
 	enum OBJECT_ID{PLAYER,ENEMY};
 public:
-	GameObject();
+	GameObject(float x, float y, float velocity_x, float velocity_y, float height, float width, float bound, int ID, ALLEGRO_BITMAP *image);
 	~GameObject();
 
 	//Accessors and Mutators
@@ -66,7 +70,7 @@ public:
 	void set_y_direction(int direction_y) { GameObject::direction_y = direction_y; }
 
 	virtual void Update() = 0;
-
+	virtual void setImage(ALLEGRO_BITMAP *image) = 0;
 	virtual void Draw() = 0;
 
 	bool CheckCollision(GameObject *otherObject);

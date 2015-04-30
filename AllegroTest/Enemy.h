@@ -5,10 +5,9 @@
 
 class Enemy : public GameObject
 {
-protected:
-	ALLEGRO_BITMAP *image;
+private:
 	Sprite *sprite;
-
+protected:
 	//For finite state ai
 	const float visible_distance = 200;
 	enum STATE{ IDLING, CHASING, SEARCHING, RETREATING, HUNTING};
@@ -21,11 +20,11 @@ protected:
 	void Loiter();
 	static Player *m_player;
 public:
-	Enemy();
+	Enemy(float x, float y, float velocity_x, float velocity_y, float height, float width, float bound, ALLEGRO_BITMAP *image);
 	~Enemy();
 	
-	void setImage(ALLEGRO_BITMAP *image);
-	void Update();
-	void Draw();
+	virtual void setImage(ALLEGRO_BITMAP *image);
+	virtual void Update();
+	virtual void Draw();
 	static void getPlayer(Player *player);
 };

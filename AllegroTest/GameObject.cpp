@@ -1,8 +1,18 @@
 #include "GameObject.h"
 
 
-GameObject::GameObject()
+GameObject::GameObject(float x, float y, float velocity_x, float velocity_y, float height, float width, float bound, int ID, ALLEGRO_BITMAP *image)
 {
+	
+	GameObject::x = x;
+	GameObject::y = y;
+	GameObject::height = height;
+	GameObject::width = width;
+	GameObject::velocity_x = velocity_x;
+	GameObject::velocity_y = velocity_y;
+	GameObject::bound = bound;
+	GameObject::ID = ID;
+	GameObject::image = image;
 }
 
 

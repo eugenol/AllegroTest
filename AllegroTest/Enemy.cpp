@@ -7,11 +7,12 @@ void Enemy::getPlayer(Player *player)
 	m_player = player;
 }
 
-Enemy::Enemy()
+Enemy::Enemy(float x, float y, float velocity_x, float velocity_y, float height, float width, float bound, ALLEGRO_BITMAP *image)
+	: GameObject(x, y, velocity_x, velocity_y, height, width, bound, ENEMY, image)
 {
 	srand(time(NULL));
 	changeState(IDLING);
-	ID = ENEMY;
+	setImage(image);
 }
 
 

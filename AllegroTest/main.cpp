@@ -88,26 +88,10 @@ int main(int argc, char **argv)
 	Player *player;
 	Enemy *enemy;
 
-	player = new Player;
-	player->set_x(SCREEN_WIDTH / 4);
-	player->set_y(SCREEN_HEIGHT / 2);
-	player->set_x_velocity(5);
-	player->set_y_velocity(5);
-	player->set_width(32*2);
-	player->set_height(48*2);
-	player->set_bound(1);
-	player->setImage(player_image);
+	player = new Player(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2,5,5,32*2,48*2,1,player_image);
 	objects.push_back(player);
 
-	enemy = new Enemy;
-	enemy->set_x(SCREEN_WIDTH / 2);
-	enemy->set_y(SCREEN_HEIGHT/2);
-	enemy->set_x_velocity(3);
-	enemy->set_y_velocity(3);
-	enemy->set_width(40*2);
-	enemy->set_height(56*2);
-	enemy->set_bound(1);
-	enemy->setImage(enemy_image);
+	enemy = new Enemy(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 3, 3, 40 * 2, 56 * 2, 1, enemy_image);
 	objects.push_back(enemy);
 
 	Enemy::getPlayer(player);
