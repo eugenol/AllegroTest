@@ -87,12 +87,16 @@ int main(int argc, char **argv)
 
 	Player *player;
 	Enemy *enemy;
+	Enemy *enemy2;
 
 	player = new Player(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2,5,5,32*2,48*2,1,player_image);
 	objects.push_back(player);
 
 	enemy = new Enemy(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 3, 3, 40 * 2, 56 * 2, 1, enemy_image);
 	objects.push_back(enemy);
+
+	enemy2 = new Enemy(3*SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 3, 3, 40 * 2, 56 * 2, 1, enemy_image);
+	objects.push_back(enemy2);
 
 	Enemy::getPlayer(player);
 
@@ -244,6 +248,7 @@ int main(int argc, char **argv)
 	//Destroy
 	delete player;
 	delete enemy;
+	delete enemy2;
 	al_destroy_bitmap(background);
 	al_destroy_sample_instance(bgInstance);
 	al_destroy_sample(bg_music);

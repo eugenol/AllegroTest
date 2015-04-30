@@ -22,20 +22,34 @@ GameObject::~GameObject()
 
 void GameObject::Update()
 {
-	//bounds checking
-	if (y <= MIN_HEIGHT + height/2+bound)
-		y = MIN_HEIGHT + height / 2 + bound;
-	
-	//Fixed so that their feet toughes the ground
-	if (y >= MAX_HEIGHT - (height / 2 - 2))
-		y = MAX_HEIGHT - (height / 2 - 2);
+	////bounds checking
+	//if (y <= MIN_HEIGHT + height/2+bound)
+	//	y = MIN_HEIGHT + height / 2 + bound;
+	//
+	////Fixed so that their feet toughes the ground
+	//if (y >= MAX_HEIGHT - (height / 2 - 2))
+	//	y = MAX_HEIGHT - (height / 2 - 2);
 
-	if (x <= MIN_WIDTH + width / 2 + bound)
-		x = MIN_WIDTH + width / 2 + bound;
-	//Scrolling, so no need for this check
+	//if (x <= MIN_WIDTH + width / 2 + bound)
+	//	x = MIN_WIDTH + width / 2 + bound;
+	////Scrolling, so no need for this check
 
-	if (x >= MAX_WIDTH - (0 + width / 2 + bound))
-		x = MAX_WIDTH - (0 + width / 2 + bound);
+	//if (x >= MAX_WIDTH - (0 + width / 2 + bound))
+	//	x = MAX_WIDTH - (0 + width / 2 + bound);
+
+	if (x > SCREEN_WIDTH - width / 2)
+		x = SCREEN_WIDTH - width / 2;
+
+	if (x < width / 2)
+		x = width / 2;
+
+	if (y > SCREEN_HEIGHT - height / 2)
+		y = SCREEN_HEIGHT - height / 2;
+
+	if (y < height / 2)
+		y = height / 2;
+
+
 }
 
 bool GameObject::CheckCollision(GameObject *otherObject)
@@ -73,6 +87,8 @@ void GameObject::Collided(GameObject *otherObject)
 	float diffy = y - otherObject->y;
 	float vertdist = otherObject->width / 2 + width / 2;
 	float hordist = otherObject->height / 2 + height / 2;
+	vertdist /= 2;
+	hordist /= 2;
 
 	if (x < otherObject->x)
 	{
