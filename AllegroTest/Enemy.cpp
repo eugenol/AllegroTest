@@ -12,6 +12,7 @@ Enemy::Enemy()
 {
 	srand(time(NULL));
 	changeState(IDLING);
+	ID = ENEMY;
 }
 
 
@@ -51,7 +52,7 @@ void Enemy::changeState(int newState)
 
 }
 
-void Enemy::Update(/*Player* player*/)
+void Enemy::Update()
 {
 	Player *player = m_player;
 	if (currState == IDLING)

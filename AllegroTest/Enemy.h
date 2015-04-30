@@ -11,7 +11,7 @@ protected:
 
 	//For finite state ai
 	const float visible_distance = 200;
-	enum STATE{ IDLING, CHASING, SEARCHING, RETREATING };
+	enum STATE{ IDLING, CHASING, SEARCHING, RETREATING, HUNTING};
 	int currState = IDLING;
 	void changeState(int newState);
 	float distanceToPlayer(Player * player);
@@ -25,7 +25,7 @@ public:
 	~Enemy();
 	
 	void setImage(ALLEGRO_BITMAP *image);
-	void Update(/*Player * player*/);
+	void Update();
 	void Draw();
 	static void getPlayer(Player *player);
 };

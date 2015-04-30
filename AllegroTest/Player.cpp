@@ -3,6 +3,7 @@
 
 Player::Player()
 {
+	ID = PLAYER;
 }
 
 
@@ -52,5 +53,13 @@ void Player::Update()
 
 void Player::Draw()
 {
+	float mousex, mousey;
+	mousex = InputManager::getInstance().getMouseX();
+	mousey = InputManager::getInstance().getMouseY();
+	if (InputManager::getInstance().isMouseButtonPressed(LEFTM))
+	{
+		al_draw_rectangle(mousex, mousey, mousex + 10, mousey + 10, al_map_rgb(255, 0, 0), 2);
+	}
+
 	sprite->Draw();
 }

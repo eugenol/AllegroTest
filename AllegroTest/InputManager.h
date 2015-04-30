@@ -18,6 +18,7 @@
 #include <vector>
 
 enum KEYS{ UP, DOWN, LEFT, RIGHT, SPACE, ESCAPE };
+enum MOUSEBUTTONS{LEFTM,RIGHTM,MIDDLEM};
 
 class InputManager
 {
@@ -25,12 +26,19 @@ private:
 	InputManager(); //Singleton
 	const int numKeys = 6;
 	std::vector<bool> keys;
+	float mouse_x, mouse_y;
+	bool mouseButton[3];
+	ALLEGRO_MOUSE_STATE mouseState;
+	//void updateMouseState();
 public:
 	~InputManager();
 	static InputManager & getInstance();
 
 	void getInput(ALLEGRO_EVENT &ev);
 	bool isKeyPressed(int key);
+	float getMouseX();
+	float getMouseY();
+	bool isMouseButtonPressed(int button);
 
 	//Can't use these methods to accidentally copy the input manager.
 	InputManager(InputManager const&) = delete;

@@ -30,7 +30,9 @@ protected:
 	float velocity_y;
 	float bound;
 	int direction_x;
-	int direction_y;
+	int direction_y;	
+	int ID;
+	enum OBJECT_ID{PLAYER,ENEMY};
 public:
 	GameObject();
 	~GameObject();
@@ -62,12 +64,13 @@ public:
 	int get_y_direction() { return direction_y; }
 	void set_y_direction(int direction_y) { GameObject::direction_y = direction_y; }
 
-	virtual void Update();
+	virtual void Update() = 0;
 
 	virtual void Draw() = 0;
 
-	//bool CheckCollision(GameObject *otherObject);
+	bool CheckCollision(GameObject *otherObject);
 	//void virtual Collided(int objectID);
+	void virtual Collided(GameObject *otherObject);
 	//bool Collidable();
 
 };

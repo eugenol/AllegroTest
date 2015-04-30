@@ -73,6 +73,7 @@ int main(int argc, char **argv)
 	al_init_ttf_addon();
 	//Keyboard
 	al_install_keyboard();
+	al_install_mouse();
 	//Images & Primatives(shapes)
 	al_init_primitives_addon();
 	al_init_image_addon();
@@ -167,7 +168,8 @@ int main(int argc, char **argv)
 	//Register Event Sources
 	al_register_event_source(event_queue, al_get_display_event_source(display)); //display events
 	al_register_event_source(event_queue, al_get_timer_event_source(timer)); // timer events
-	al_register_event_source(event_queue, al_get_keyboard_event_source());
+	al_register_event_source(event_queue, al_get_keyboard_event_source()); // keyboard events
+	al_register_event_source(event_queue, al_get_mouse_event_source()); // mouse events
 
 	
 	al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -199,17 +201,28 @@ int main(int argc, char **argv)
 
 			redraw = true;
 	
-			//al_get_keyboard_state();
-			
-			//player->Update();
-			//enemy->Update(/*player*/);
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 				(*iter)->Update();
 
-			cameraUpdate(cameraPosition, player->get_x(), player->get_y(), player->get_width(), player->get_height());
-			al_identity_transform(&camera);
-			al_translate_transform(&camera, -cameraPosition[0], -cameraPosition[1]);
-			al_use_transform(&camera);
+			for (std::list<GameObject*>::iterator iter1 = objects.begin(); iter1 != objects.end(); iter1++)
+			{
+				for (std::list<GameObject*>::iterator iter2 = objects.begin(); iter2 != objects.end(); iter2++)
+				{
+					bool collision = false;
+					if (iter1 != iter2)
+						collision = (*iter1)->CheckCollision(*iter2);
+					if (collision)
+						(*iter1)->Collided(*iter2);
+				}
+			}
+
+
+
+
+			//cameraUpdate(cameraPosition, player->get_x(), player->get_y(), player->get_width(), player->get_height());
+			//al_identity_transform(&camera);
+			//al_translate_transform(&camera, -cameraPosition[0], -cameraPosition[1]);
+			//al_use_transform(&camera);
 		}
 
 		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
