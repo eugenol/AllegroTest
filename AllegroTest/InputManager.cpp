@@ -96,28 +96,15 @@ bool InputManager::isKeyPressed(int key)
 
 bool InputManager::isMouseButtonPressed(int button)
 {
-	//updateMouseState();
 	return mouseButton[button];
 }
 
 float InputManager::getMouseX()
 { 
-	//updateMouseState();
 	return mouse_x; 
 }
 
 float InputManager::getMouseY()
 {
-	//updateMouseState();
 	return mouse_y; 
 }
-//
-//void  InputManager::updateMouseState()
-//{
-//	al_get_mouse_state(&mouseState);
-//	mouse_x = mouseState.x;
-//	mouse_y = mouseState.y;
-//	mouseButton[LEFTM] = mouseState.buttons & 1; // left mouse button pressed
-//	mouseButton[RIGHTM] = mouseState.buttons & 2; // right mouse button pressed
-//	mouseButton[MIDDLEM] = mouseState.buttons & 3; // middle mouse button pressed
-//}

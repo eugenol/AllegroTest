@@ -66,23 +66,23 @@ void GameObject::Collided(GameObject *otherObject)
 
 	if (x < otherObject->x)
 	{
-		x -= vertdist / 2;
-		otherObject->x = otherObject->x + vertdist / 2;
+		x -=( vertdist / 2- fabsf(diffx)/2);
+		otherObject->x = otherObject->x + (vertdist / 2 - fabsf(diffx) / 2);
 	}
 	if (x > otherObject->x)
 	{
-		x += vertdist / 2;
-		otherObject->x = otherObject->x - vertdist / 2;
+		x += (vertdist / 2 - fabsf(diffx) / 2);
+		otherObject->x = otherObject->x - (vertdist / 2 - fabsf(diffx) / 2);
 	}
 	else if (y < otherObject->y)
 	{
-		y -= hordist / 2;
-		otherObject->y = otherObject->y + hordist / 2;
+		y -= (hordist / 2 - fabsf(diffy) / 2);
+		otherObject->y = otherObject->y + (hordist / 2 - fabsf(diffy) / 2);
 	}
 	else if (y > otherObject->y)
 	{
-		y += hordist / 2;
-		otherObject->y = otherObject->y - hordist / 2;
+		y += (hordist / 2 - fabsf(diffy) / 2);
+		otherObject->y = otherObject->y - (hordist / 2 - fabsf(diffy) / 2);
 	}
 
 }

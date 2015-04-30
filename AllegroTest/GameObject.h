@@ -8,6 +8,7 @@
 
 #include <cstdlib>
 #include <ctime>
+#include <cmath>
 
 //Consts
 const int SCREEN_WIDTH = 800;

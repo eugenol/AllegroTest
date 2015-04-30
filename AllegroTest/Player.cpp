@@ -47,6 +47,8 @@ void Player::Update()
 		x += velocity_x;
 		direction_x = +1;
 	}
+
+
 	GameObject::Update();
 	sprite->Update();
 }
@@ -58,7 +60,7 @@ void Player::Draw()
 	mousey = InputManager::getInstance().getMouseY();
 	if (InputManager::getInstance().isMouseButtonPressed(LEFTM))
 	{
-		al_draw_rectangle(mousex, mousey, mousex + 10, mousey + 10, al_map_rgb(255, 0, 0), 2);
+		al_draw_circle(mousex, mousey, 10, al_map_rgb(255, 0, 0), 2);
 	}
 
 	sprite->Draw();

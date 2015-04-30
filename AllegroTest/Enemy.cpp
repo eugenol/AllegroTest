@@ -1,5 +1,4 @@
 #include "Enemy.h"
-#include <math.h>
 
 Player * Enemy::m_player = NULL;
 

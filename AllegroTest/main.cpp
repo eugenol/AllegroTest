@@ -89,8 +89,8 @@ int main(int argc, char **argv)
 	Enemy *enemy;
 
 	player = new Player;
-	player->set_x(5);
-	player->set_y(SCREEN_HEIGHT-70);
+	player->set_x(SCREEN_WIDTH / 4);
+	player->set_y(SCREEN_HEIGHT / 2);
 	player->set_x_velocity(5);
 	player->set_y_velocity(5);
 	player->set_width(32*2);
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 
 	enemy = new Enemy;
 	enemy->set_x(SCREEN_WIDTH / 2);
-	enemy->set_y(SCREEN_HEIGHT-28);
+	enemy->set_y(SCREEN_HEIGHT/2);
 	enemy->set_x_velocity(3);
 	enemy->set_y_velocity(3);
 	enemy->set_width(40*2);

@@ -4,10 +4,15 @@
 * so it doesnt make much of a difference. Could be a bit clunky to use, but removes
 * all the code from main. Also, was good practice.
 * use as follows:
+*
 * 		InputManager::getInstance().getInput(ev); // gets input from event
 *
 *		if (InputManager::getInstance().isKeyPressed(ESCAPE)) // check if key is pressed.
 *			game_done = true;
+*
+* 		mousex = InputManager::getInstance().getMouseX();
+*		mousey = InputManager::getInstance().getMouseY();
+*		if (InputManager::getInstance().isMouseButtonPressed(LEFTM))
 *
 */
 
@@ -29,7 +34,6 @@ private:
 	float mouse_x, mouse_y;
 	bool mouseButton[3];
 	ALLEGRO_MOUSE_STATE mouseState;
-	//void updateMouseState();
 public:
 	~InputManager();
 	static InputManager & getInstance();
