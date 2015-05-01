@@ -4,8 +4,8 @@
 Bullet::Bullet(float x, float y, float velocity_x, float velocity_y, int direction_x, int direction_y)
 	: GameObject(x, y, velocity_x, velocity_y, 3, 3, 0, BULLET, NULL)
 {
-	direction_x = direction_x;
-	direction_y = direction_y;
+	GameObject::direction_x = direction_x;
+	GameObject::direction_y = direction_y;
 }
 
 

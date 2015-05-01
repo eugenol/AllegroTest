@@ -48,9 +48,16 @@ void Player::Update()
 		direction_x = +1;
 	}
 	
-	if (InputManager::getInstance().isKeyPressed(SPACE))
+	if (InputManager::getInstance().isMouseButtonPressed(LEFTM))
 	{
-		Shoot();
+
+		if (shootDelay == 0||shootDelay > 5)
+		{
+			shootDelay = 0;
+			Shoot();
+		}
+		shootDelay++;
+		
 	}
 
 

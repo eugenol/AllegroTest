@@ -11,6 +11,7 @@ class Player : public GameObject
 private:
 	Sprite *sprite;
 	void Shoot();
+	int shootDelay=0;
 public:
 	Player(float x, float y, float velocity_x, float velocity_y, float height, float width, float bound, ALLEGRO_BITMAP *image);
 	~Player();

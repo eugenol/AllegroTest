@@ -253,8 +253,8 @@ int main(int argc, char **argv)
 
 	//Destroy
 	delete player;
-	delete enemy;
-	delete enemy2;
+	//delete enemy;
+	//delete enemy2;
 	al_destroy_bitmap(background);
 	al_destroy_sample_instance(bgInstance);
 	al_destroy_sample(bg_music);

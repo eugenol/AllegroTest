@@ -25,15 +25,20 @@ void EntityManager::getEntityList(std::list<GameObject*> *entityList)
 void EntityManager::UpdateList()
 {
 	// Call this each update loop, if the object is dead, delete it
-	for (std::list<GameObject*>::iterator iter = entityList->begin(); iter != entityList->end(); iter++)
+
+	std::list<GameObject*>::iterator iter = entityList->begin();
+	while (iter != entityList->end())
 	{
 		if (!(*iter)->getAlive())
 		{
+			std::list<GameObject*>::iterator prev = iter++;
 			GameObject *tempPtr;
-			tempPtr = *iter;
-			//entityList->erase(iter);
-			//delete tempPtr;
+			tempPtr = *prev;
+			entityList->erase(prev);
+			delete tempPtr;
 		}
+		else
+			iter++;
 	}
 }
 
