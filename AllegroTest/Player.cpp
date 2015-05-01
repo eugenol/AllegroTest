@@ -5,6 +5,7 @@ Player::Player(float x, float y, float velocity_x, float velocity_y, float heigh
 	: GameObject(x, y, velocity_x, velocity_y, height, width, bound, PLAYER, image)
 {
 	setImage(image);
+	ID = PLAYER;
 }
 
 
@@ -46,6 +47,11 @@ void Player::Update()
 		x += velocity_x;
 		direction_x = +1;
 	}
+	
+	if (InputManager::getInstance().isKeyPressed(SPACE))
+	{
+		Shoot();
+	}
 
 
 	GameObject::Update();
@@ -63,4 +69,25 @@ void Player::Draw()
 	}
 
 	sprite->Draw();
+}
+
+void Player::Shoot()
+{
+	float target_x = InputManager::getInstance().getMouseX();
+	float target_y = InputManager::getInstance().getMouseY();
+
+	//find angle to target
+	float deltax = target_x - x;
+	float deltay = target_y - y;
+	float angleToTarget = atan2(deltay, deltax);
+
+	float velocity_x = abs(cos(angleToTarget) * 10);
+	float velocity_y = abs(sin(angleToTarget) * 10);
+
+	int y_direction = sin(angleToTarget) < 0 ? -1 : 1;
+	int x_direction = cos(angleToTarget) < 0 ? -1 : 1;
+
+	Bullet *bulletPtr = new Bullet(x + x_direction*width / 2, y, velocity_x, velocity_y, x_direction, y_direction);
+
+	EntityManager::getInstance().AddEntity(bulletPtr);
 }

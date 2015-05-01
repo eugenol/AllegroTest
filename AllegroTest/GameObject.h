@@ -35,9 +35,11 @@ protected:
 	int direction_x;
 	int direction_y;	
 	int ID;
+	int health;
+	bool isAlive;
 	ALLEGRO_BITMAP *image;
 	//Sprite *sprite;
-	enum OBJECT_ID{PLAYER,ENEMY};
+	enum OBJECT_ID{PLAYER,ENEMY, BULLET};
 public:
 	GameObject(float x, float y, float velocity_x, float velocity_y, float height, float width, float bound, int ID, ALLEGRO_BITMAP *image);
 	~GameObject();
@@ -68,6 +70,8 @@ public:
 	void set_x_direction(int direction_x) { GameObject::direction_x = direction_x; }
 	int get_y_direction() { return direction_y; }
 	void set_y_direction(int direction_y) { GameObject::direction_y = direction_y; }
+
+	bool getAlive() { return isAlive; }
 
 	virtual void Update() = 0;
 	virtual void setImage(ALLEGRO_BITMAP *image) = 0;

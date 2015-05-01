@@ -13,6 +13,8 @@ GameObject::GameObject(float x, float y, float velocity_x, float velocity_y, flo
 	GameObject::bound = bound;
 	GameObject::ID = ID;
 	GameObject::image = image;
+	health = 100;
+	isAlive = true;
 }
 
 
@@ -49,6 +51,9 @@ void GameObject::Update()
 	if (y < height / 2)
 		y = height / 2;
 
+	// If dead, dead.
+	if (health <= 0)
+		isAlive = false;
 
 }
 
@@ -83,32 +88,47 @@ void GameObject::Collided(GameObject *otherObject)
 	//	y = otherObject->y - (otherObject->height / 2 + height / 2);
 	//else if (direction_y == -1)
 	//	y = otherObject->y + (otherObject->height / 2 + height / 2);
-	float diffx = x - otherObject->x;
-	float diffy = y - otherObject->y;
-	float vertdist = otherObject->width / 2 + width / 2;
-	float hordist = otherObject->height / 2 + height / 2;
-	vertdist /= 2;
-	hordist /= 2;
+	if ((this->ID == PLAYER || this->ID == ENEMY) && (otherObject->ID == PLAYER || otherObject->ID == ENEMY))
+	{
+		float diffx = x - otherObject->x;
+		float diffy = y - otherObject->y;
+		float vertdist = otherObject->width / 2 + width / 2;
+		float hordist = otherObject->height / 2 + height / 2;
+		vertdist /= 2;
+		hordist /= 2;
 
-	if (x < otherObject->x)
-	{
-		x -=( vertdist / 2- fabsf(diffx)/2);
-		otherObject->x = otherObject->x + (vertdist / 2 - fabsf(diffx) / 2);
+		if (x < otherObject->x)
+		{
+			x -= (vertdist / 2 - fabsf(diffx) / 2);
+			otherObject->x = otherObject->x + (vertdist / 2 - fabsf(diffx) / 2);
+		}
+		if (x > otherObject->x)
+		{
+			x += (vertdist / 2 - fabsf(diffx) / 2);
+			otherObject->x = otherObject->x - (vertdist / 2 - fabsf(diffx) / 2);
+		}
+		else if (y < otherObject->y)
+		{
+			y -= (hordist / 2 - fabsf(diffy) / 2);
+			otherObject->y = otherObject->y + (hordist / 2 - fabsf(diffy) / 2);
+		}
+		else if (y > otherObject->y)
+		{
+			y += (hordist / 2 - fabsf(diffy) / 2);
+			otherObject->y = otherObject->y - (hordist / 2 - fabsf(diffy) / 2);
+		}
 	}
-	if (x > otherObject->x)
+	else if ((this->ID == BULLET && otherObject->ID == ENEMY))
 	{
-		x += (vertdist / 2 - fabsf(diffx) / 2);
-		otherObject->x = otherObject->x - (vertdist / 2 - fabsf(diffx) / 2);
+		this->isAlive = false;
+		otherObject->health -= 20;
 	}
-	else if (y < otherObject->y)
+	else if (this->ID == ENEMY && otherObject->ID == BULLET)
 	{
-		y -= (hordist / 2 - fabsf(diffy) / 2);
-		otherObject->y = otherObject->y + (hordist / 2 - fabsf(diffy) / 2);
+		otherObject->isAlive = false;
+		this->health -= 20;
 	}
-	else if (y > otherObject->y)
-	{
-		y += (hordist / 2 - fabsf(diffy) / 2);
-		otherObject->y = otherObject->y - (hordist / 2 - fabsf(diffy) / 2);
-	}
+
+
 
 }

@@ -16,6 +16,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "InputManager.h"
+#include "EntityManager.h"
 
 void cameraUpdate(float *cameraPosition, float x, float y, int width, int height);
 
@@ -39,6 +40,8 @@ int main(int argc, char **argv)
 	float cameraPosition[2] = { 0, 0 };
 
 	std::list<GameObject*> objects;
+
+	EntityManager::getInstance().getEntityList(&objects);
 
 	//Intitializations
 	ALLEGRO_DISPLAY *display = NULL;
@@ -189,6 +192,9 @@ int main(int argc, char **argv)
 
 			redraw = true;
 	
+			EntityManager::getInstance().UpdateList();
+
+
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 				(*iter)->Update();
 

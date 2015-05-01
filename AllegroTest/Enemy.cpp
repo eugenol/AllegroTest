@@ -13,6 +13,7 @@ Enemy::Enemy(float x, float y, float velocity_x, float velocity_y, float height,
 	srand(time(NULL));
 	changeState(IDLING);
 	setImage(image);
+	ID = ENEMY;
 }
 
 
