@@ -72,6 +72,7 @@ public:
 	void set_y_direction(int direction_y) { GameObject::direction_y = direction_y; }
 
 	bool getAlive() { return isAlive; }
+	int getHealth() { return health; }
 
 	virtual void Update() = 0;
 	virtual void setImage(ALLEGRO_BITMAP *image) = 0;

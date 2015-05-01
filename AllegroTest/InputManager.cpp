@@ -30,16 +30,16 @@ void InputManager::getInput(ALLEGRO_EVENT &ev)
 	{
 		switch (ev.keyboard.keycode)
 		{
-		case ALLEGRO_KEY_UP:
+		case ALLEGRO_KEY_W:
 			keys[UP] = true;
 			break;
-		case ALLEGRO_KEY_DOWN:
+		case ALLEGRO_KEY_S:
 			keys[DOWN] = true;
 			break;
-		case ALLEGRO_KEY_LEFT:
+		case ALLEGRO_KEY_A:
 			keys[LEFT] = true;
 			break;
-		case ALLEGRO_KEY_RIGHT:
+		case ALLEGRO_KEY_D:
 			keys[RIGHT] = true;
 			break;
 		case ALLEGRO_KEY_SPACE:
@@ -55,16 +55,16 @@ void InputManager::getInput(ALLEGRO_EVENT &ev)
 	{
 		switch (ev.keyboard.keycode)
 		{
-		case ALLEGRO_KEY_UP:
+		case ALLEGRO_KEY_W:
 			keys[UP] = false;
 			break;
-		case ALLEGRO_KEY_DOWN:
+		case ALLEGRO_KEY_S:
 			keys[DOWN] = false;
 			break;
-		case ALLEGRO_KEY_LEFT:
+		case ALLEGRO_KEY_A:
 			keys[LEFT] = false;
 			break;
-		case ALLEGRO_KEY_RIGHT:
+		case ALLEGRO_KEY_D:
 			keys[RIGHT] = false;
 			break;
 		case ALLEGRO_KEY_SPACE:

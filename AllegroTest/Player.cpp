@@ -51,7 +51,7 @@ void Player::Update()
 	if (InputManager::getInstance().isMouseButtonPressed(LEFTM))
 	{
 
-		if (shootDelay == 0||shootDelay > 5)
+		if (shootDelay == 0||shootDelay > 6)
 		{
 			shootDelay = 0;
 			Shoot();
@@ -94,7 +94,7 @@ void Player::Shoot()
 	int y_direction = sin(angleToTarget) < 0 ? -1 : 1;
 	int x_direction = cos(angleToTarget) < 0 ? -1 : 1;
 
-	Bullet *bulletPtr = new Bullet(x + x_direction*width / 2, y, velocity_x, velocity_y, x_direction, y_direction);
+	Bullet *bulletPtr = new Bullet(x, y, velocity_x, velocity_y, x_direction, y_direction);
 
 	EntityManager::getInstance().AddEntity(bulletPtr);
 }

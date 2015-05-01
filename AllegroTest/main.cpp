@@ -229,6 +229,14 @@ int main(int argc, char **argv)
 		if (InputManager::getInstance().isKeyPressed(ESCAPE))
 			game_done = true;
 
+		// For testing, spawn random hulk
+		if (InputManager::getInstance().isKeyPressed(SPACE))
+		{
+			Enemy *enemyPtr = new Enemy(rand()/800, rand()/600, 3, 3, 40 * 2, 56 * 2, 1, enemy_image);
+
+			EntityManager::getInstance().AddEntity(enemyPtr);
+		}
+
 
 		if (redraw && al_is_event_queue_empty(event_queue)) //have to wait until event queue is empty befor redrawing.
 		{

@@ -69,8 +69,11 @@ void Sprite::Update()
 void Sprite::Draw()
 {
 	//al_draw_bitmap_region(image, curFrame*frameWidth, curRow*frameHeight, frameWidth, frameHeight, owner->get_x(), owner->get_x(), 0);
-
+	if (owner->getHealth()>=30)
 	al_draw_scaled_bitmap(image, curFrame*frameWidth, curRow*frameHeight, frameWidth, frameHeight,
 		owner->get_x() - frameWidth / 2 * scaleFactor, owner->get_y() - frameHeight / 2 * scaleFactor,
 		frameWidth*scaleFactor, frameHeight*scaleFactor, 0);
+	else
+	al_draw_tinted_bitmap_region(image, al_map_rgb(255, 0, 0), curFrame*frameWidth, curRow*frameHeight,
+		frameWidth, frameHeight, owner->get_x() - frameWidth / 2, owner->get_y() - frameHeight / 2,0);
 }

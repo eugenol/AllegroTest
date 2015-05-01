@@ -56,6 +56,9 @@ void Enemy::changeState(int newState)
 void Enemy::Update()
 {
 	Player *player = m_player;
+	if (health <= 30)
+		changeState(RETREATING);
+
 	if (currState == IDLING)
 	{
 		if (visible_distance > distanceToPlayer(player))
@@ -157,6 +160,12 @@ void Enemy::Update()
 	else if (currState == RETREATING)
 	{
 		//Not used yet.
+		int y_direction = sin(angleToPlayer(player)) < 0 ? -1 : 1;
+		int x_direction = cos(angleToPlayer(player)) < 0 ? -1 : 1;
+		set_y_direction(-y_direction);
+		set_x_direction(-x_direction);
+		set_x(get_x() + get_x_velocity()*get_x_direction());
+		set_y(get_y() + get_y_velocity()*get_y_direction());
 	}
 
 	//Can add for enemy to head in last known direction of player.
