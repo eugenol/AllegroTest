@@ -117,6 +117,18 @@ void GameObject::Collided(GameObject *otherObject)
 			y += (hordist / 2 - fabsf(diffy) / 2);
 			otherObject->y = otherObject->y - (hordist / 2 - fabsf(diffy) / 2);
 		}
+
+		if (this->ID == PLAYER)
+		{
+			if (rand()%20 == 0)
+				this->health -= 1;
+		}
+		if (otherObject->ID == PLAYER)
+		{
+			if (rand()%20 == 0)
+				otherObject->health -= 1;
+		}
+
 	}
 	else if ((this->ID == BULLET && otherObject->ID == ENEMY)&& this->getAlive())
 	{

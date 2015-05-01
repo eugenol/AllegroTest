@@ -92,13 +92,13 @@ int main(int argc, char **argv)
 	Enemy *enemy;
 	Enemy *enemy2;
 
-	player = new Player(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2,5,5,32*2,48*2,1,player_image);
+	player = new Player(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2,5,5,32,48,1,player_image);
 	objects.push_back(player);
 
-	enemy = new Enemy(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 3, 3, 40 * 2, 56 * 2, 1, enemy_image);
+	enemy = new Enemy(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 3, 3, 40, 56, 1, enemy_image);
 	objects.push_back(enemy);
 
-	enemy2 = new Enemy(3*SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 3, 3, 40 * 2, 56 * 2, 1, enemy_image);
+	enemy2 = new Enemy(3*SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 3, 3, 40, 56, 1, enemy_image);
 	objects.push_back(enemy2);
 
 	Enemy::getPlayer(player);
@@ -232,7 +232,7 @@ int main(int argc, char **argv)
 		// For testing, spawn random hulk
 		if (InputManager::getInstance().isKeyPressed(SPACE))
 		{
-			Enemy *enemyPtr = new Enemy(rand()/800, rand()/600, 3, 3, 40 * 2, 56 * 2, 1, enemy_image);
+			Enemy *enemyPtr = new Enemy(rand()/800, rand()/600, 3, 3, 40, 56, 1, enemy_image);
 
 			EntityManager::getInstance().AddEntity(enemyPtr);
 		}
@@ -255,12 +255,14 @@ int main(int argc, char **argv)
 
 			al_draw_text(font_pirulen_24, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, 10, ALLEGRO_ALIGN_CENTER, "IRON MAN vs. HULK");
 			al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), SCREEN_WIDTH/2 + cameraPosition[0] ,30, ALLEGRO_ALIGN_CENTER, "%i fps", gameFPS);
+			al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), SCREEN_WIDTH -100, SCREEN_HEIGHT-20, ALLEGRO_ALIGN_CENTER, "Health: %i", player->getHealth());
 			al_flip_display();
 		}
 	}
 
 	//Destroy
-	delete player;
+	if (player)
+		delete player;
 	//delete enemy;
 	//delete enemy2;
 	al_destroy_bitmap(background);

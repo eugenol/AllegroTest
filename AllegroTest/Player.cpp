@@ -16,7 +16,7 @@ Player::~Player()
 
 void Player::setImage(ALLEGRO_BITMAP *image)
 {
-	sprite = new Sprite(4, 0, 0, 5, 32, 48, 4, 4, 0, 1, this, image, 2);
+	sprite = new Sprite(4, 0, 0, 5, 32, 48, 4, 4, 0, 1, this, image, 1);
 }
 
 void Player::Update()

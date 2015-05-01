@@ -26,7 +26,7 @@ void Enemy::setImage(ALLEGRO_BITMAP *image)
 {
 	//Move this to the constructor
 	Enemy::image = image;
-	sprite = new Sprite(4, 0, 0, 5, 40, 56, 4, 4, 0, 1, this, image,2);
+	sprite = new Sprite(4, 0, 0, 5, 40, 56, 4, 4, 0, 1, this, image,1);
 }
 
 void Enemy::changeState(int newState)
@@ -49,7 +49,10 @@ void Enemy::changeState(int newState)
 		set_y_velocity(2);
 	}
 	else if (currState == RETREATING)
-	{}
+	{
+		set_x_velocity(3);
+		set_y_velocity(3);
+	}
 
 }
 
@@ -136,7 +139,7 @@ void Enemy::Update()
 			last_player_x = player->get_x();
 			last_player_y = player->get_y();
 		}
-		else if (sqrt(pow(deltax, 2) + pow(deltay, 2)) > 50)
+		else if (sqrt(pow(deltax, 2) + pow(deltay, 2)) > 25)
 		{
 			//if enemy just lost sight of the player, move in last known direction
 			float angle = atan2(deltay, deltax);
@@ -145,6 +148,8 @@ void Enemy::Update()
 			int x_direction = cos(angle) < 0 ? -1 : 1;
 			set_y_direction(y_direction);
 			set_x_direction(x_direction);
+			set_x_velocity(3*abs(cos(angle)));
+			set_y_velocity(3*abs(sin(angle)));
 			set_x(get_x() + get_x_velocity()*get_x_direction());
 			set_y(get_y() + get_y_velocity()*get_y_direction());
 
@@ -159,13 +164,26 @@ void Enemy::Update()
 	}
 	else if (currState == RETREATING)
 	{
-		//Not used yet.
-		int y_direction = sin(angleToPlayer(player)) < 0 ? -1 : 1;
-		int x_direction = cos(angleToPlayer(player)) < 0 ? -1 : 1;
-		set_y_direction(-y_direction);
-		set_x_direction(-x_direction);
-		set_x(get_x() + get_x_velocity()*get_x_direction());
-		set_y(get_y() + get_y_velocity()*get_y_direction());
+		// Check if close to the last known position, if then start idling, otherwise, move to last known position
+		float deltax = last_player_x - this->get_x();
+		float deltay = last_player_y - this->get_y();
+
+		if (visible_distance > distanceToPlayer(player))
+		{
+			int y_direction = sin(angleToPlayer(player)) < 0 ? -1 : 1;
+			int x_direction = cos(angleToPlayer(player)) < 0 ? -1 : 1;
+			set_y_direction(-y_direction);
+			set_x_direction(-x_direction);
+			set_x(get_x() + get_x_velocity()*get_x_direction());
+			set_y(get_y() + get_y_velocity()*get_y_direction());
+
+			last_player_x = player->get_x();
+			last_player_y = player->get_y();
+		}
+		else
+		{
+			Loiter();
+		}
 	}
 
 	//Can add for enemy to head in last known direction of player.
