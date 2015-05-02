@@ -77,12 +77,21 @@ int main(int argc, char **argv)
 	//Keyboard
 	al_install_keyboard();
 	al_install_mouse();
+
 	//Images & Primatives(shapes)
 	al_init_primitives_addon();
 	al_init_image_addon();
 	//Audio
 	al_install_audio();
 	al_init_acodec_addon();
+
+	//Mouse cursor
+	ALLEGRO_BITMAP *cursorImage;
+	cursorImage = al_load_bitmap("target.png");
+	al_convert_mask_to_alpha(cursorImage, al_map_rgb(255, 255, 255));
+	ALLEGRO_MOUSE_CURSOR *cursor;
+	cursor = al_create_mouse_cursor(cursorImage, 16, 16);
+
 
 	//New Player Object
 	player_image = al_load_bitmap("ironman.png");
@@ -126,6 +135,8 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	al_set_window_title(display, "IRON MAN vs. HULK");
+	//Mouse cursor
+	al_set_mouse_cursor(display, cursor);
 
 	//Create Timer
 	timer = al_create_timer(1.0 / FPS);
@@ -253,9 +264,17 @@ int main(int argc, char **argv)
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 				(*iter)->Draw();
 
+
 			al_draw_text(font_pirulen_24, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, 10, ALLEGRO_ALIGN_CENTER, "IRON MAN vs. HULK");
 			al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), SCREEN_WIDTH/2 + cameraPosition[0] ,30, ALLEGRO_ALIGN_CENTER, "%i fps", gameFPS);
-			al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), SCREEN_WIDTH -100, SCREEN_HEIGHT-20, ALLEGRO_ALIGN_CENTER, "Health: %i", player->getHealth());
+			
+			if (player->getHealth() >= 0 || player->getHealth() <= 100)
+			{
+				al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), SCREEN_WIDTH - 100, SCREEN_HEIGHT - 20, ALLEGRO_ALIGN_CENTER, "Health: %i", player->getHealth());
+				//al_draw_rectangle(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 20, )
+			}
+			
+			
 			al_flip_display();
 		}
 	}
