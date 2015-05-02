@@ -1,11 +1,12 @@
 #include "Player.h"
 
 
-Player::Player(float x, float y, float velocity_x, float velocity_y, float height, float width, float bound, ALLEGRO_BITMAP *image)
+Player::Player(float x, float y, float velocity_x, float velocity_y, float height, float width, float bound, ALLEGRO_BITMAP *image, ALLEGRO_SAMPLE_INSTANCE *bullet_sound)
 	: GameObject(x, y, velocity_x, velocity_y, height, width, bound, PLAYER, image)
 {
 	setImage(image);
 	ID = PLAYER;
+	Player::bullet_sound = bullet_sound;
 }
 
 
@@ -80,6 +81,7 @@ void Player::Draw()
 
 void Player::Shoot()
 {
+	//al_play_sample_instance(bullet_sound);
 	float target_x = InputManager::getInstance().getMouseX();
 	float target_y = InputManager::getInstance().getMouseY();
 

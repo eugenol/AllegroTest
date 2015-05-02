@@ -58,6 +58,9 @@ int main(int argc, char **argv)
 	//Background music
 	ALLEGRO_SAMPLE *bg_music = NULL;
 	ALLEGRO_SAMPLE_INSTANCE *bgInstance = NULL;
+	//Gun sound
+	ALLEGRO_SAMPLE *laser_sound = NULL;
+	ALLEGRO_SAMPLE_INSTANCE *laser_sound_instance = NULL;
 
 	//Camera
 	ALLEGRO_TRANSFORM camera;
@@ -97,11 +100,27 @@ int main(int argc, char **argv)
 	player_image = al_load_bitmap("ironman.png");
 	enemy_image = al_load_bitmap("hulk.png");
 
+	//Sounds & Musics
+	al_reserve_samples(2);
+	bg_music = al_load_sample("A Night of Dizzy Spells.ogg");
+	bgInstance = al_create_sample_instance(bg_music);
+	al_set_sample_instance_playmode(bgInstance, ALLEGRO_PLAYMODE_LOOP);
+	//can set other properties here such as speed, gain, etc..
+	al_attach_sample_instance_to_mixer(bgInstance, al_get_default_mixer());
+
+	laser_sound = al_load_sample("laser.wav");
+	laser_sound_instance = al_create_sample_instance(laser_sound);
+	al_set_sample_instance_playmode(laser_sound_instance, ALLEGRO_PLAYMODE_ONCE);
+	al_set_sample_instance_speed(laser_sound_instance, 5.0);
+	//can set other properties here such as speed, gain, etc..
+	al_attach_sample_instance_to_mixer(laser_sound_instance, al_get_default_mixer());
+
+
 	Player *player;
 	Enemy *enemy;
 	Enemy *enemy2;
 
-	player = new Player(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2,5,5,32,48,1,player_image);
+	player = new Player(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 5, 5, 32, 48, 1, player_image, laser_sound_instance);
 	objects.push_back(player);
 
 	enemy = new Enemy(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 3, 3, 40, 56, 1, enemy_image);
@@ -112,13 +131,7 @@ int main(int argc, char **argv)
 
 	Enemy::getPlayer(player);
 
-	//Sounds & Musics
-	al_reserve_samples(1);
-	bg_music = al_load_sample("A Night of Dizzy Spells.ogg");
-	bgInstance = al_create_sample_instance(bg_music);
-	al_set_sample_instance_playmode(bgInstance, ALLEGRO_PLAYMODE_LOOP);
-	//can set other properties here such as speed, gain, etc..
-	al_attach_sample_instance_to_mixer(bgInstance, al_get_default_mixer());
+
 
 
 	//Load Background
@@ -271,8 +284,8 @@ int main(int argc, char **argv)
 			if (player->getHealth() >= 0 && player->getHealth() <= 100)
 			{
 				//al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), SCREEN_WIDTH - 100, SCREEN_HEIGHT - 20, ALLEGRO_ALIGN_CENTER, "Health: %i", player->getHealth());
-				al_draw_rectangle(SCREEN_WIDTH - 116, SCREEN_HEIGHT - 20, SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, al_map_rgb(255, 0, 0), 2);
-				al_draw_filled_rectangle(SCREEN_WIDTH - 113, SCREEN_HEIGHT - 17, SCREEN_WIDTH - 113 + player->getHealth(), SCREEN_HEIGHT - 13, al_map_rgb(255, 0, 0));
+				al_draw_rectangle(SCREEN_WIDTH - 116, SCREEN_HEIGHT - 20, SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, al_map_rgba(255, 0, 0, 100), 2);
+				al_draw_filled_rectangle(SCREEN_WIDTH - 113, SCREEN_HEIGHT - 17, SCREEN_WIDTH - 113 + player->getHealth(), SCREEN_HEIGHT - 13, al_map_rgba(255, 0, 0,50));
 			}
 			
 			

@@ -130,7 +130,7 @@ void GameObject::Collided(GameObject *otherObject)
 		}
 
 	}
-	else if ((this->ID == BULLET && otherObject->ID == ENEMY)&& this->getAlive())
+	else if ((this->ID == BULLET && otherObject->ID == ENEMY) && this->getAlive())
 	{
 		this->isAlive = false;
 		otherObject->health -= 20;
