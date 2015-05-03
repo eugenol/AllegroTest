@@ -72,7 +72,11 @@ int main(int argc, char **argv)
 	ALLEGRO_MOUSE_CURSOR *cursor = NULL;
 	//Camera
 	ALLEGRO_TRANSFORM camera;
-
+	//Player
+	Player *player = NULL;
+	//Thread
+	ALLEGRO_THREAD *loading = NULL;
+	
 	//Intitalize allegro
 	if (!al_init())
 	{
@@ -85,60 +89,6 @@ int main(int argc, char **argv)
 	//Fonts
 	al_init_font_addon();
 	al_init_ttf_addon();
-	//Keyboard
-	al_install_keyboard();
-	al_install_mouse();
-	//Images & Primatives(shapes)
-	al_init_primitives_addon();
-	al_init_image_addon();
-	//Audio
-	al_install_audio();
-	al_init_acodec_addon();
-
-
-	cursorImage = al_load_bitmap("target.png");
-	al_convert_mask_to_alpha(cursorImage, al_map_rgb(255, 255, 255));
-	cursor = al_create_mouse_cursor(cursorImage, 16, 16);
-
-
-	//Load images
-	player_image = al_load_bitmap("ironman.png");
-	enemy_image = al_load_bitmap("hulk.png");
-
-	//Sounds & Musics
-	al_reserve_samples(2);
-	bg_music = al_load_sample("A Night of Dizzy Spells.ogg");
-	bgInstance = al_create_sample_instance(bg_music);
-	al_set_sample_instance_playmode(bgInstance, ALLEGRO_PLAYMODE_LOOP);
-	//can set other properties here such as speed, gain, etc..
-	al_attach_sample_instance_to_mixer(bgInstance, al_get_default_mixer());
-
-	laser_sound = al_load_sample("laser.wav");
-	laser_sound_instance = al_create_sample_instance(laser_sound);
-	al_set_sample_instance_playmode(laser_sound_instance, ALLEGRO_PLAYMODE_ONCE);
-	al_set_sample_instance_speed(laser_sound_instance, 5.0);
-	//can set other properties here such as speed, gain, etc..
-	al_attach_sample_instance_to_mixer(laser_sound_instance, al_get_default_mixer());
-
-
-	Player *player = NULL;
-	Enemy *enemy = NULL;
-	Enemy *enemy2 = NULL;
-
-	player = new Player(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 5, 5, 32, 48, 1, player_image, laser_sound_instance);
-	objects.push_back(player);
-
-	enemy = new Enemy(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 3, 3, 40, 56, 1, enemy_image);
-	objects.push_back(enemy);
-
-	enemy2 = new Enemy(3*SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 3, 3, 40, 56, 1, enemy_image);
-	objects.push_back(enemy2);
-
-	Enemy::getPlayer(player);
-
-
-	//Load Background
-	background = al_load_bitmap("city_background.png");
 
 	//Create Display
 	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
@@ -151,20 +101,64 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	al_set_window_title(display, "IRON MAN vs. HULK");
-	//Mouse cursor
-	al_set_mouse_cursor(display, cursor);
+	data.display = display;
 
-	//Create Timer
-	timer = al_create_timer(1.0 / FPS);
+	//Create Font
+	font_pirulen_72 = al_load_ttf_font("pirulen.ttf", 72, 0);
+	font_pirulen_24 = al_load_ttf_font("pirulen.ttf", 24, 0);
+	font_pirulen_18 = al_load_ttf_font("pirulen.ttf", 18, 0);
+	if (!font_pirulen_72 && !font_pirulen_18 && !font_pirulen_24)
+	{
+		al_show_native_message_box(al_get_current_display(), "Error", "Error", "Allegro failed to create the font",
+			NULL, ALLEGRO_MESSAGEBOX_ERROR);
+		return -1;
+	}
+
+	loading = al_create_thread(loading_thread, &data);
+	al_start_thread(loading);
+	while (!data.done_loading)
+	{
+		static int  a = 0;
+
+		if (a >= 400)
+			a = 0;
+
+		if (a < 100)
+			al_draw_text(font_pirulen_18, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2 - 7, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_LEFT, "Loading");
+		else if (a < 200)
+			al_draw_text(font_pirulen_18, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2 - 7, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_LEFT, "Loading.");
+		else if (a <300)
+			al_draw_text(font_pirulen_18, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2 - 7, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_LEFT, "Loading..");
+		else if (a < 400)
+			al_draw_text(font_pirulen_18, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2 - 7, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_LEFT, "Loading...");
+		a++;
+		al_flip_display();
+		al_clear_to_color(al_map_rgb(0, 0, 0));
+	}
+	al_destroy_thread(loading);
+
+	//Get loaded data
+	//display = data.display;
+	event_queue = data.event_queue;
+	timer = data.timer;
+	player_image = data.player_image;
+	enemy_image = data.enemy_image;
+	background = data.background;
+	bg_music = data.bg_music;
+	bgInstance = data.bgInstance;
+	laser_sound = data.laser_sound;
+	laser_sound_instance = data.laser_sound_instance;
+	cursorImage = data.cursorImage;
+	cursor = data.cursor;
+	player = data.player;
+
+	//Checks
 	if (!timer)
 	{
 		al_show_native_message_box(al_get_current_display(), "Error", "Error", "Allegro failed to create the timer",
 			NULL, ALLEGRO_MESSAGEBOX_ERROR);
 		return -1;
 	}
-
-	//Create Event Queue
-	event_queue = al_create_event_queue();
 	if (!event_queue)
 	{
 		al_show_native_message_box(al_get_current_display(), "Error", "Error", "Allegro failed to create the event queue",
@@ -172,36 +166,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	//Create Font
-	font_pirulen_72 = al_load_ttf_font("pirulen.ttf", 72, 0);
-	font_pirulen_24= al_load_ttf_font("pirulen.ttf", 24, 0);
-	font_pirulen_18 = al_load_ttf_font("pirulen.ttf", 18, 0);
-	if (!font_pirulen_72 && !font_pirulen_18)
-	{
-		al_show_native_message_box(al_get_current_display(), "Error", "Error", "Allegro failed to create the font",
-			NULL, ALLEGRO_MESSAGEBOX_ERROR);
-		return -1;
-	}
 
-	//Register Event Sources
-	al_register_event_source(event_queue, al_get_display_event_source(display)); //display events
-	al_register_event_source(event_queue, al_get_timer_event_source(timer)); // timer events
-	al_register_event_source(event_queue, al_get_keyboard_event_source()); // keyboard events
-	al_register_event_source(event_queue, al_get_mouse_event_source()); // mouse events
-
-	bool done_loading = false;
-	ALLEGRO_THREAD *loading = al_create_thread(loading_thread, &done_loading);
-	al_start_thread(loading);
-	while (!done_loading)
-	{
-		static int  a = 0;
-		al_draw_textf(font_pirulen_18, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_CENTRE, "Loading... %i", a);
-		a++;
-		al_flip_display();
-		al_clear_to_color(al_map_rgb(0, 0, 0));
-	}
-	al_destroy_thread(loading);
-	
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
 
@@ -230,9 +195,6 @@ int main(int argc, char **argv)
 			}
 
 			redraw = true;
-	
-			EntityManager::getInstance().UpdateList();
-
 
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 				(*iter)->Update();
@@ -249,9 +211,7 @@ int main(int argc, char **argv)
 				}
 			}
 
-
-
-
+			EntityManager::getInstance().UpdateList();
 			//cameraUpdate(cameraPosition, player->get_x(), player->get_y(), player->get_width(), player->get_height());
 			//al_identity_transform(&camera);
 			//al_translate_transform(&camera, -cameraPosition[0], -cameraPosition[1]);
@@ -271,9 +231,12 @@ int main(int argc, char **argv)
 		// For testing, spawn random hulk
 		if (InputManager::getInstance().isKeyPressed(SPACE))
 		{
-			Enemy *enemyPtr = new Enemy(rand()/800, rand()/600, 3, 3, 40, 56, 1, enemy_image);
+			if (rand() % 5 == 0) //Dont let too many spawn at a time;
+			{
+				Enemy *enemyPtr = new Enemy(rand() / 800, rand() / 600, 3, 3, 40, 56, 1, enemy_image);
+				EntityManager::getInstance().AddEntity(enemyPtr);
+			}
 
-			EntityManager::getInstance().AddEntity(enemyPtr);
 		}
 
 
@@ -309,10 +272,9 @@ int main(int argc, char **argv)
 	}
 
 	//Destroy
-	if (player)
-		delete player;
-	//delete enemy;
-	//delete enemy2;
+	//if (player)
+	//	delete player;
+
 	al_destroy_bitmap(background);
 	al_destroy_sample_instance(bgInstance);
 	al_destroy_sample(bg_music);
@@ -324,6 +286,11 @@ int main(int argc, char **argv)
 	al_destroy_event_queue(event_queue);
 	al_destroy_timer(timer);
 	al_destroy_display(display);
+
+	al_destroy_bitmap(cursorImage);
+	al_destroy_mouse_cursor(cursor);
+	al_destroy_sample_instance(laser_sound_instance);
+	al_destroy_sample(laser_sound);
 
 	return 0;
 }
@@ -345,8 +312,69 @@ void cameraUpdate(float *cameraPosition, float x, float y, int width, int height
 
 static void*loading_thread(ALLEGRO_THREAD*load, void*data)
 {
-	bool *done = (bool*)data;
-	al_rest(10.0);
-	*done = true;
+	InitData *Data = (InitData*)data;
+	
+	//Intitialize addons
+	al_install_keyboard();		//Keyboard
+	al_install_mouse();			//Mouse
+	al_init_primitives_addon(); //Primitives (shapes)
+	al_init_image_addon();		//Images
+	al_install_audio();			//Audio
+	al_init_acodec_addon();		//Audio
+
+	//Set up cursor Image
+	Data->cursorImage = al_load_bitmap("target.png");
+	al_convert_mask_to_alpha(Data->cursorImage, al_map_rgb(255, 255, 255));
+	Data->cursor = al_create_mouse_cursor(Data->cursorImage, 16, 16);
+
+	//Load images
+	Data->player_image = al_load_bitmap("ironman.png");			//Player image
+	Data->enemy_image = al_load_bitmap("hulk.png");				//Enemy Image
+	Data->background = al_load_bitmap("city_background.png");	//Load Background
+
+	//Sounds & Musics
+	al_reserve_samples(2);
+	Data->bg_music = al_load_sample("A Night of Dizzy Spells.ogg");
+	Data->bgInstance = al_create_sample_instance(Data->bg_music);
+	al_set_sample_instance_playmode(Data->bgInstance, ALLEGRO_PLAYMODE_LOOP);
+	//can set other properties here such as speed, gain, etc..
+	al_attach_sample_instance_to_mixer(Data->bgInstance, al_get_default_mixer());
+
+	Data->laser_sound = al_load_sample("laser.wav");
+	Data->laser_sound_instance = al_create_sample_instance(Data->laser_sound);
+	al_set_sample_instance_playmode(Data->laser_sound_instance, ALLEGRO_PLAYMODE_ONCE);
+	al_set_sample_instance_speed(Data->laser_sound_instance, 5.0);
+	//can set other properties here such as speed, gain, etc..
+	al_attach_sample_instance_to_mixer(Data->laser_sound_instance, al_get_default_mixer());
+
+	Data->player = new Player(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 5, 5, 32, 48, 1, Data->player_image, Data->laser_sound_instance);
+	EntityManager::getInstance().AddEntity(Data->player);
+	Enemy::getPlayer(Data->player);
+
+	//Create Timer
+	Data->timer = al_create_timer(1.0 / FPS);
+	//Create Event Queue
+	Data->event_queue = al_create_event_queue();
+
+	//Register Event Sources
+	al_register_event_source(Data->event_queue, al_get_display_event_source(Data->display)); //display events
+	al_register_event_source(Data->event_queue, al_get_timer_event_source(Data->timer)); // timer events
+	al_register_event_source(Data->event_queue, al_get_keyboard_event_source()); // keyboard events
+	al_register_event_source(Data->event_queue, al_get_mouse_event_source()); // mouse events
+	
+	//Create Enemies
+	Enemy *enemy1 = new Enemy(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 3, 3, 40, 56, 1, Data->enemy_image);
+	EntityManager::getInstance().AddEntity(enemy1);
+
+	Enemy *enemy2 = new Enemy(3 * SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 3, 3, 40, 56, 1, Data->enemy_image);
+	EntityManager::getInstance().AddEntity(enemy2);
+
+	al_rest(2.5);
+
+	//Mouse cursor
+	al_set_mouse_cursor(Data->display, Data->cursor);
+
+	Data->done_loading = true;
+
 	return NULL;
 }
