@@ -17,20 +17,26 @@
 #include "Enemy.h"
 #include "InputManager.h"
 #include "EntityManager.h"
+#include "InitData.h"
 
 void cameraUpdate(float *cameraPosition, float x, float y, int width, int height);
+static void*loading_thread(ALLEGRO_THREAD*load, void*data);
 
+
+class Data
+{
+
+};
 int main(int argc, char **argv)
 {
 	//Consts
 	//const int SCREEN_WIDTH = 800;
 	//const int SCREEN_HEIGHT = 600;
 	//const float FPS = 60;
-	//enum KEYS{KEY_UP,KEY_DOWN,KEY_LEFT,KEY_RIGHT};
 
+	InitData data;
 	bool game_done = false;
 	bool redraw = false;
-	bool key[5] = { false, false, false, false, false};
 	srand(time(NULL));
 
 	float gameTime = 0;
@@ -61,7 +67,9 @@ int main(int argc, char **argv)
 	//Gun sound
 	ALLEGRO_SAMPLE *laser_sound = NULL;
 	ALLEGRO_SAMPLE_INSTANCE *laser_sound_instance = NULL;
-
+	//Mouse cursor
+	ALLEGRO_BITMAP *cursorImage = NULL;
+	ALLEGRO_MOUSE_CURSOR *cursor = NULL;
 	//Camera
 	ALLEGRO_TRANSFORM camera;
 
@@ -80,7 +88,6 @@ int main(int argc, char **argv)
 	//Keyboard
 	al_install_keyboard();
 	al_install_mouse();
-
 	//Images & Primatives(shapes)
 	al_init_primitives_addon();
 	al_init_image_addon();
@@ -88,15 +95,13 @@ int main(int argc, char **argv)
 	al_install_audio();
 	al_init_acodec_addon();
 
-	//Mouse cursor
-	ALLEGRO_BITMAP *cursorImage;
+
 	cursorImage = al_load_bitmap("target.png");
 	al_convert_mask_to_alpha(cursorImage, al_map_rgb(255, 255, 255));
-	ALLEGRO_MOUSE_CURSOR *cursor;
 	cursor = al_create_mouse_cursor(cursorImage, 16, 16);
 
 
-	//New Player Object
+	//Load images
 	player_image = al_load_bitmap("ironman.png");
 	enemy_image = al_load_bitmap("hulk.png");
 
@@ -116,9 +121,9 @@ int main(int argc, char **argv)
 	al_attach_sample_instance_to_mixer(laser_sound_instance, al_get_default_mixer());
 
 
-	Player *player;
-	Enemy *enemy;
-	Enemy *enemy2;
+	Player *player = NULL;
+	Enemy *enemy = NULL;
+	Enemy *enemy2 = NULL;
 
 	player = new Player(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 5, 5, 32, 48, 1, player_image, laser_sound_instance);
 	objects.push_back(player);
@@ -130,8 +135,6 @@ int main(int argc, char **argv)
 	objects.push_back(enemy2);
 
 	Enemy::getPlayer(player);
-
-
 
 
 	//Load Background
@@ -186,6 +189,18 @@ int main(int argc, char **argv)
 	al_register_event_source(event_queue, al_get_keyboard_event_source()); // keyboard events
 	al_register_event_source(event_queue, al_get_mouse_event_source()); // mouse events
 
+	bool done_loading = false;
+	ALLEGRO_THREAD *loading = al_create_thread(loading_thread, &done_loading);
+	al_start_thread(loading);
+	while (!done_loading)
+	{
+		static int  a = 0;
+		al_draw_textf(font_pirulen_18, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_CENTRE, "Loading... %i", a);
+		a++;
+		al_flip_display();
+		al_clear_to_color(al_map_rgb(0, 0, 0));
+	}
+	al_destroy_thread(loading);
 	
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
@@ -326,4 +341,12 @@ void cameraUpdate(float *cameraPosition, float x, float y, int width, int height
 	//	cameraPosition[1] = 600;
 	//if (cameraPosition[1] > 1200)
 	//	cameraPosition[1] = 1200;
+}
+
+static void*loading_thread(ALLEGRO_THREAD*load, void*data)
+{
+	bool *done = (bool*)data;
+	al_rest(10.0);
+	*done = true;
+	return NULL;
 }
