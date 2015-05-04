@@ -243,7 +243,7 @@ int main(int argc, char **argv)
 		{
 			redraw = false;
 
-			al_clear_to_color(al_map_rgb(0, 0, 0));
+			//al_clear_to_color(al_map_rgb(0, 0, 0));
 			///using a bitmap as a background kills the framerate. Draw lines to see motion effect.
 			//for (int i = -100; i < 100; i++)
 			//	al_draw_line(i*75, -600, i*75, 1200, al_map_rgb(255, 0, 255), 2);
@@ -267,6 +267,7 @@ int main(int argc, char **argv)
 			
 			
 			al_flip_display();
+			al_clear_to_color(al_map_rgb(0, 0, 0));
 		}
 	}
 

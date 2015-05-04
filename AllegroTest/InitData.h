@@ -1,4 +1,6 @@
-#pragma once
+#ifndef INITDATA_H
+#define INITDATA_H
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
@@ -36,4 +38,4 @@ public:
 
 	bool done_loading;
 };
-
+#endif
