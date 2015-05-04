@@ -21,10 +21,10 @@
 #include "InputManager.h"
 #include "EntityManager.h"
 #include "InitData.h"
+#include "mappy_a5.h"
 
 void cameraUpdate(float *cameraPosition, float x, float y, int width, int height);
 static void*loading_thread(ALLEGRO_THREAD*load, void*data);
-ALLEGRO_BITMAP * loadMap();
 
 int main(int argc, char **argv)
 {
@@ -84,11 +84,6 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	//Intitialize addons
-	//Fonts
-	al_init_font_addon();
-	al_init_ttf_addon();
-
 	//Create Display
 	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 	//al_set_new_display_flags(ALLEGRO_NOFRAME);
@@ -101,6 +96,14 @@ int main(int argc, char **argv)
 	}
 	al_set_window_title(display, "IRON MAN vs. HULK");
 	data.display = display;
+
+	//Intitialize addons
+	//Fonts
+	al_init_font_addon();
+	al_init_ttf_addon();
+	
+	if (MapLoad("testmap.FMP", 1))
+		return -5;
 
 	//Create Font
 	font_pirulen_72 = al_load_ttf_font("pirulen.ttf", 72, 0);
@@ -123,13 +126,13 @@ int main(int argc, char **argv)
 			a = 0;
 
 		if (a < 300)
-			al_draw_text(font_pirulen_72, al_map_rgb(255, 255, 255), 150, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "Loading   ");
+			al_draw_text(font_pirulen_72, al_map_rgb(255, 255, 255), 150, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_LEFT, "Loading   ");
 		else if (a < 600)
-			al_draw_text(font_pirulen_72, al_map_rgb(255, 255, 255), 150, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "Loading.  ");
+			al_draw_text(font_pirulen_72, al_map_rgb(255, 255, 255), 150, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_LEFT, "Loading.  ");
 		else if (a <900)
-			al_draw_text(font_pirulen_72, al_map_rgb(255, 255, 255), 150, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "Loading.. ");
+			al_draw_text(font_pirulen_72, al_map_rgb(255, 255, 255), 150, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_LEFT, "Loading.. ");
 		else if (a < 1200)
-			al_draw_text(font_pirulen_72, al_map_rgb(255, 255, 255), 150, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "Loading...");
+			al_draw_text(font_pirulen_72, al_map_rgb(255, 255, 255), 150, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_LEFT, "Loading...");
 		a++; 
 		al_flip_display();
 		al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -243,13 +246,8 @@ int main(int argc, char **argv)
 		{
 			redraw = false;
 
-			//al_clear_to_color(al_map_rgb(0, 0, 0));
-			///using a bitmap as a background kills the framerate. Draw lines to see motion effect.
-			//for (int i = -100; i < 100; i++)
-			//	al_draw_line(i*75, -600, i*75, 1200, al_map_rgb(255, 0, 255), 2);
-			//al_draw_filled_rectangle(0, 0, 1200, 600, al_map_rgb(255, 0, 255));
-			//al_draw_bitmap(background, 0, 0, NULL);
-			//al_draw_bitmap(background, 1067, 0, NULL);
+			MapDrawBG(0, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
 
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 				(*iter)->Draw();
@@ -291,6 +289,9 @@ int main(int argc, char **argv)
 	al_destroy_mouse_cursor(cursor);
 	al_destroy_sample_instance(laser_sound_instance);
 	al_destroy_sample(laser_sound);
+
+	//Unload map
+	MapFreeMem();
 
 	return 0;
 }
@@ -371,53 +372,10 @@ static void*loading_thread(ALLEGRO_THREAD*load, void*data)
 
 	al_rest(2.5);
 
-	//Load Map
-	Data->map = loadMap();
-	al_set_target_bitmap(al_get_backbuffer(Data->display));
 	//Mouse cursor
 	al_set_mouse_cursor(Data->display, Data->cursor);
 
 	Data->done_loading = true;
 
 	return NULL;
-}
-
-ALLEGRO_BITMAP * loadMap()
-{
-	int mapfile[40][30] = { { 0 } };
-	std::string temp;
-	std::stringstream tempRow;
-	std::ifstream inFile("map/map.dat");
-	ALLEGRO_BITMAP *tempBitmap;
-	ALLEGRO_BITMAP *map;
-
-	//Read mapfile into array
-	for (int i = 0; i < 30; i++)
-	{
-		std::getline(inFile, temp);
-		std::stringstream tempRow(temp);
-		for (int j = 0; j < 40; j++)
-		{
-			tempRow >> mapfile[j][i];
-		}
-	}
-
-	//Draw map
-	map = al_create_bitmap(SCREEN_WIDTH, SCREEN_HEIGHT);
-	al_set_target_bitmap(map);
-	al_clear_to_color(al_map_rgb(0, 0, 0));
-
-	for (int i = 0; i < 40; i++)
-	{
-		for (int j = 0; j < 30; j++)
-		{
-			tempRow.str("");
-			tempRow << "map/0" << mapfile[i][j] << ".png";
-			temp = tempRow.str();
-			tempBitmap = al_load_bitmap(temp.c_str());
-			al_draw_bitmap(tempBitmap, i * 20, j * 20, 0);
-			al_destroy_bitmap(tempBitmap);
-		}
-	}
-	return map;
 }

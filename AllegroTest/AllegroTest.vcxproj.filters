@@ -42,6 +42,9 @@
     <ClCompile Include="InitData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="mappy_A5.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md">
@@ -71,6 +74,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="InitData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mappy_A5.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
