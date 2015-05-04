@@ -45,5 +45,5 @@ void EntityManager::UpdateList()
 void EntityManager::AddEntity(GameObject *entity)
 {
 	// add entity to the list
-	entityList->push_back(entity);
+	entityList->push_front(entity);
 }

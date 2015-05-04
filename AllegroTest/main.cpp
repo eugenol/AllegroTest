@@ -232,7 +232,7 @@ int main(int argc, char **argv)
 		{
 			if (rand() % 5 == 0) //Dont let too many spawn at a time;
 			{
-				Enemy *enemyPtr = new Enemy(rand() / 800, rand() / 600, 3, 3, 40, 56, 1, enemy_image);
+				Enemy *enemyPtr = new Enemy(rand() % 801, rand() % 601, 3, 3, 40, 56, 1, enemy_image);
 				EntityManager::getInstance().AddEntity(enemyPtr);
 			}
 
@@ -248,7 +248,7 @@ int main(int argc, char **argv)
 			//for (int i = -100; i < 100; i++)
 			//	al_draw_line(i*75, -600, i*75, 1200, al_map_rgb(255, 0, 255), 2);
 			//al_draw_filled_rectangle(0, 0, 1200, 600, al_map_rgb(255, 0, 255));
-			al_draw_bitmap(background, 0, 0, NULL);
+			//al_draw_bitmap(background, 0, 0, NULL);
 			//al_draw_bitmap(background, 1067, 0, NULL);
 
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
