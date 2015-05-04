@@ -123,13 +123,13 @@ int main(int argc, char **argv)
 			a = 0;
 
 		if (a < 300)
-			al_draw_text(font_pirulen_18, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "Loading   ");
+			al_draw_text(font_pirulen_72, al_map_rgb(255, 255, 255), 150, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "Loading   ");
 		else if (a < 600)
-			al_draw_text(font_pirulen_18, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "Loading.  ");
+			al_draw_text(font_pirulen_72, al_map_rgb(255, 255, 255), 150, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "Loading.  ");
 		else if (a <900)
-			al_draw_text(font_pirulen_18, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "Loading.. ");
+			al_draw_text(font_pirulen_72, al_map_rgb(255, 255, 255), 150, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "Loading.. ");
 		else if (a < 1200)
-			al_draw_text(font_pirulen_18, al_map_rgb(255, 255, 255), SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "Loading...");
+			al_draw_text(font_pirulen_72, al_map_rgb(255, 255, 255), 150, SCREEN_HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "Loading...");
 		a++; 
 		al_flip_display();
 		al_clear_to_color(al_map_rgb(0, 0, 0));
