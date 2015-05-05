@@ -143,17 +143,17 @@ int main(int argc, char **argv)
 	//display = data.display;
 	event_queue = data.event_queue;
 	timer = data.timer;
-	player_image = data.player_image;
-	enemy_image = data.enemy_image;
-	//background = data.background;
-	background = data.map;
+	player_image = al_clone_bitmap(data.player_image); //NB have to do this
+	enemy_image = al_clone_bitmap(data.enemy_image); //NB have to do this
+	background = al_clone_bitmap(data.background); //NB have to do this
 	bg_music = data.bg_music;
 	bgInstance = data.bgInstance;
 	laser_sound = data.laser_sound;
 	laser_sound_instance = data.laser_sound_instance;
-	cursorImage = data.cursorImage;
+	cursorImage = al_clone_bitmap(data.cursorImage);
 	cursor = data.cursor;
 	player = data.player;
+	
 
 	//Checks
 	if (!timer)
@@ -202,18 +202,27 @@ int main(int argc, char **argv)
 
 			redraw = true;
 
+			//Updating
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 				(*iter)->Update();
 
+			////Colission Detection with Map elements
+			//for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
+			//{
+			//	//Find tile that the object is on, check if tile is an obstruction, if it is, 
+			//	//call colission routine
+			//}
+
+			//Colission Detection with objects
 			for (std::list<GameObject*>::iterator iter1 = objects.begin(); iter1 != objects.end(); iter1++)
 			{
 				for (std::list<GameObject*>::iterator iter2 = objects.begin(); iter2 != objects.end(); iter2++)
 				{
-					bool collision = false;
-					if (iter1 != iter2)
-						collision = (*iter1)->CheckCollision(*iter2);
-					if (collision)
-						(*iter1)->Collided(*iter2);
+					if (iter1 != iter2) //Cant collide with yourself!
+					{
+						if ((*iter1)->CheckCollision(*iter2)) //Did you collide?
+							(*iter1)->Collided(*iter2); //Do something about it.
+					}					
 				}
 			}
 
@@ -246,6 +255,7 @@ int main(int argc, char **argv)
 		{
 			redraw = false;
 
+			//al_draw_bitmap(background, 0, 0, 0);
 			MapDrawBG(0, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 
@@ -254,15 +264,7 @@ int main(int argc, char **argv)
 
 
 			al_draw_text(font_pirulen_24, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, 10, ALLEGRO_ALIGN_CENTER, "IRON MAN vs. HULK");
-			al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), SCREEN_WIDTH/2 + cameraPosition[0] ,30, ALLEGRO_ALIGN_CENTER, "%i fps", gameFPS);
-			
-			if (player->getHealth() >= 0 && player->getHealth() <= 100)
-			{
-				//al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), SCREEN_WIDTH - 100, SCREEN_HEIGHT - 20, ALLEGRO_ALIGN_CENTER, "Health: %i", player->getHealth());
-				al_draw_rectangle(SCREEN_WIDTH - 116, SCREEN_HEIGHT - 20, SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, al_map_rgba(255, 0, 0, 100), 2);
-				al_draw_filled_rectangle(SCREEN_WIDTH - 113, SCREEN_HEIGHT - 17, SCREEN_WIDTH - 113 + player->getHealth(), SCREEN_HEIGHT - 13, al_map_rgba(255, 0, 0,50));
-			}
-			
+			al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), SCREEN_WIDTH/2 + cameraPosition[0] ,30, ALLEGRO_ALIGN_CENTER, "%i fps", gameFPS);		
 			
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));

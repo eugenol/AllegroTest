@@ -7,12 +7,13 @@ Player::Player(float x, float y, float velocity_x, float velocity_y, float heigh
 	setImage(image);
 	ID = PLAYER;
 	Player::bullet_sound = bullet_sound;
+	PlayerHUD = new HUD(this);
 }
-
 
 Player::~Player()
 {
 	delete sprite;
+	delete PlayerHUD;
 }
 
 void Player::setImage(ALLEGRO_BITMAP *image)
@@ -77,6 +78,7 @@ void Player::Draw()
 	}
 
 	sprite->Draw();
+	PlayerHUD->Draw();
 }
 
 void Player::Shoot()
