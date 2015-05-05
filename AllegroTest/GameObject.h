@@ -10,7 +10,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
-
+#include "mappy_A5.h"
 //#include "Sprite.h"
 
 //Consts
@@ -80,8 +80,10 @@ public:
 	virtual void Draw() = 0;
 
 	bool CheckCollision(GameObject *otherObject);
+	bool CheckCollision();
 	//void virtual Collided(int objectID);
 	void virtual Collided(GameObject *otherObject);
+	void virtual Collided();
 	//bool Collidable();
 
 };

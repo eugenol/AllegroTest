@@ -15,11 +15,19 @@ Bullet::~Bullet()
 
 void Bullet::Update()
 {
-	x += velocity_x*direction_x;
-	y += velocity_y*direction_y;
+	if (isAlive)
+	{
+		x += velocity_x*direction_x;
+		y += velocity_y*direction_y;
+	}
 
-	if (x <= 0 || x >= 800 || y <= 0 || y >= 600)
+	if ((x <= 0+width/2) ||( x >= 800-width/2) || (y <= 0 +height/2) || (y >= 600 - height/2))
+	{ 
 		isAlive = false;
+		x = 0;
+		y = 0;
+	}
+		
 }
 
 void Bullet::Draw()

@@ -207,11 +207,13 @@ int main(int argc, char **argv)
 				(*iter)->Update();
 
 			////Colission Detection with Map elements
-			//for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
-			//{
-			//	//Find tile that the object is on, check if tile is an obstruction, if it is, 
-			//	//call colission routine
-			//}
+			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
+			{
+				//if ((*iter)->CheckCollision())
+				//	(*iter)->Collided();
+
+				//call colission routine
+			}
 
 			//Colission Detection with objects
 			for (std::list<GameObject*>::iterator iter1 = objects.begin(); iter1 != objects.end(); iter1++)
@@ -227,6 +229,7 @@ int main(int argc, char **argv)
 			}
 
 			EntityManager::getInstance().UpdateList();
+
 			//cameraUpdate(cameraPosition, player->get_x(), player->get_y(), player->get_width(), player->get_height());
 			//al_identity_transform(&camera);
 			//al_translate_transform(&camera, -cameraPosition[0], -cameraPosition[1]);
@@ -244,7 +247,7 @@ int main(int argc, char **argv)
 		{
 			if (rand() % 5 == 0) //Dont let too many spawn at a time;
 			{
-				Enemy *enemyPtr = new Enemy(rand() % 801, rand() % 601, 3, 3, 40, 56, 1, enemy_image);
+				Enemy *enemyPtr = new Enemy(rand() % 700 + 50, rand() % 500 +50, 3, 3, 56, 40, 1, enemy_image);
 				EntityManager::getInstance().AddEntity(enemyPtr);
 			}
 
@@ -256,7 +259,7 @@ int main(int argc, char **argv)
 			redraw = false;
 
 			//al_draw_bitmap(background, 0, 0, 0);
-			MapDrawBG(0, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+			MapDrawBG(20, 20, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
@@ -350,7 +353,7 @@ static void*loading_thread(ALLEGRO_THREAD*load, void*data)
 	//can set other properties here such as speed, gain, etc..
 	al_attach_sample_instance_to_mixer(Data->laser_sound_instance, al_get_default_mixer());
 
-	Data->player = new Player(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 5, 5, 32, 48, 1, Data->player_image, Data->laser_sound_instance);
+	Data->player = new Player(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 5, 5, 48, 32, 1, Data->player_image, Data->laser_sound_instance);
 	EntityManager::getInstance().AddEntity(Data->player);
 	Enemy::getPlayer(Data->player);
 
@@ -366,10 +369,10 @@ static void*loading_thread(ALLEGRO_THREAD*load, void*data)
 	al_register_event_source(Data->event_queue, al_get_mouse_event_source()); // mouse events
 	
 	//Create Enemies
-	Enemy *enemy1 = new Enemy(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 3, 3, 40, 56, 1, Data->enemy_image);
+	Enemy *enemy1 = new Enemy(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 3, 3, 56, 40, 1, Data->enemy_image);
 	EntityManager::getInstance().AddEntity(enemy1);
 
-	Enemy *enemy2 = new Enemy(3 * SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 3, 3, 40, 56, 1, Data->enemy_image);
+	Enemy *enemy2 = new Enemy(3 * SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 3, 3, 56, 40, 1, Data->enemy_image);
 	EntityManager::getInstance().AddEntity(enemy2);
 
 	al_rest(2.5);

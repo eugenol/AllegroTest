@@ -24,21 +24,6 @@ GameObject::~GameObject()
 
 void GameObject::Update()
 {
-	////bounds checking
-	//if (y <= MIN_HEIGHT + height/2+bound)
-	//	y = MIN_HEIGHT + height / 2 + bound;
-	//
-	////Fixed so that their feet toughes the ground
-	//if (y >= MAX_HEIGHT - (height / 2 - 2))
-	//	y = MAX_HEIGHT - (height / 2 - 2);
-
-	//if (x <= MIN_WIDTH + width / 2 + bound)
-	//	x = MIN_WIDTH + width / 2 + bound;
-	////Scrolling, so no need for this check
-
-	//if (x >= MAX_WIDTH - (0 + width / 2 + bound))
-	//	x = MAX_WIDTH - (0 + width / 2 + bound);
-
 	if (x > SCREEN_WIDTH - width / 2)
 		x = SCREEN_WIDTH - width / 2;
 
@@ -53,8 +38,9 @@ void GameObject::Update()
 
 	// If dead, dead.
 	if (health <= 0)
+	{
 		isAlive = false;
-
+	}
 }
 
 bool GameObject::CheckCollision(GameObject *otherObject)
@@ -69,13 +55,18 @@ bool GameObject::CheckCollision(GameObject *otherObject)
 
 	if ((x - width / 2 > otherObject->x + otherObject->width / 2) ||
 		(y - height / 2 > otherObject->y + otherObject->height / 2) ||
-		(otherObject->x - otherObject->width / 2 > x - width / 2) ||
+		(otherObject->x - otherObject->width / 2 > x + width / 2) ||
 		(otherObject->y - otherObject->height > y + height / 2))
 	{
 		return false;
 	}
 	return true;
 
+}
+
+bool GameObject::CheckCollision()
+{
+	return false;
 }
 
 void GameObject::Collided(GameObject *otherObject)
@@ -143,4 +134,18 @@ void GameObject::Collided(GameObject *otherObject)
 
 
 
+}
+
+void GameObject::Collided()
+{
+
+	float left = x - width / 2;
+	float right = x + width / 2;
+	float top = y - height / 2;
+	float bottom = y + height / 2;
+
+	if (ID == BULLET)
+	{
+		isAlive = false;
+	}
 }

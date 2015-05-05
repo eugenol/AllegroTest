@@ -92,8 +92,8 @@ void Player::Shoot()
 	float deltay = target_y - y;
 	float angleToTarget = atan2(deltay, deltax);
 
-	float velocity_x = abs(cos(angleToTarget) * 15);
-	float velocity_y = abs(sin(angleToTarget) * 15);
+	float velocity_x = abs(cos(angleToTarget) * 10);
+	float velocity_y = abs(sin(angleToTarget) * 10);
 
 	int y_direction = sin(angleToTarget) < 0 ? -1 : 1;
 	int x_direction = cos(angleToTarget) < 0 ? -1 : 1;
