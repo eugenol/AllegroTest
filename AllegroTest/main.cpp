@@ -153,6 +153,9 @@ int main(int argc, char **argv)
 	cursorImage = al_clone_bitmap(data.cursorImage);
 	cursor = data.cursor;
 	player = data.player;
+	//Mouse cursor
+	cursor = al_create_mouse_cursor(cursorImage, 16, 16);
+	al_set_mouse_cursor(display, cursor);
 	
 
 	//Checks
@@ -209,8 +212,8 @@ int main(int argc, char **argv)
 			////Colission Detection with Map elements
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 			{
-				//if ((*iter)->CheckCollision())
-				//	(*iter)->Collided();
+				if ((*iter)->CheckCollision())
+					(*iter)->Collided();
 
 				//call colission routine
 			}
@@ -331,7 +334,6 @@ static void*loading_thread(ALLEGRO_THREAD*load, void*data)
 	//Set up cursor Image
 	Data->cursorImage = al_load_bitmap("target.png");
 	al_convert_mask_to_alpha(Data->cursorImage, al_map_rgb(255, 255, 255));
-	Data->cursor = al_create_mouse_cursor(Data->cursorImage, 16, 16);
 
 	//Load images
 	Data->player_image = al_load_bitmap("ironman.png");			//Player image
@@ -376,10 +378,6 @@ static void*loading_thread(ALLEGRO_THREAD*load, void*data)
 	EntityManager::getInstance().AddEntity(enemy2);
 
 	al_rest(2.5);
-
-	//Mouse cursor
-	al_set_mouse_cursor(Data->display, Data->cursor);
-
 	Data->done_loading = true;
 
 	return NULL;

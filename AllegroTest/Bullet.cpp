@@ -28,6 +28,13 @@ void Bullet::Update()
 		y = 0;
 	}
 		
+
+	if ((x <= 0 + width / 2) || (x >= 800 - width / 2) || (y <= 0 + height / 2) || (y >= 600 - height / 2))
+	{
+		isAlive = false;
+		x = 0;
+		y = 0;
+	}
 }
 
 void Bullet::Draw()
