@@ -5,6 +5,7 @@
 #include "Bullet.h"
 #include <cmath>
 #include "EntityManager.h"
+#include "HUD.h"
 
 class Player : public GameObject
 {
@@ -13,6 +14,7 @@ private:
 	void Shoot();
 	int shootDelay=0;
 	ALLEGRO_SAMPLE_INSTANCE *bullet_sound;
+	HUD *PlayerHUD;
 public:
 	Player(float x, float y, float velocity_x, float velocity_y, float height, float width, float bound, ALLEGRO_BITMAP *image, ALLEGRO_SAMPLE_INSTANCE *bullet_sound);
 	~Player();

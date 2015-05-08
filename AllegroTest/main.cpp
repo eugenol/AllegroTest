@@ -21,10 +21,10 @@
 #include "InputManager.h"
 #include "EntityManager.h"
 #include "InitData.h"
+#include "mappy_a5.h"
 
 void cameraUpdate(float *cameraPosition, float x, float y, int width, int height);
 static void*loading_thread(ALLEGRO_THREAD*load, void*data);
-ALLEGRO_BITMAP * loadMap();
 
 int main(int argc, char **argv)
 {
@@ -84,11 +84,6 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	//Intitialize addons
-	//Fonts
-	al_init_font_addon();
-	al_init_ttf_addon();
-
 	//Create Display
 	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 	//al_set_new_display_flags(ALLEGRO_NOFRAME);
@@ -101,6 +96,14 @@ int main(int argc, char **argv)
 	}
 	al_set_window_title(display, "IRON MAN vs. HULK");
 	data.display = display;
+
+	//Intitialize addons
+	//Fonts
+	al_init_font_addon();
+	al_init_ttf_addon();
+	
+	if (MapLoad("testmap.FMP", 1))
+		return -5;
 
 	//Create Font
 	font_pirulen_72 = al_load_ttf_font("pirulen.ttf", 72, 0);
@@ -140,17 +143,20 @@ int main(int argc, char **argv)
 	//display = data.display;
 	event_queue = data.event_queue;
 	timer = data.timer;
-	player_image = data.player_image;
-	enemy_image = data.enemy_image;
-	//background = data.background;
-	background = data.map;
+	player_image = al_clone_bitmap(data.player_image); //NB have to do this
+	enemy_image = al_clone_bitmap(data.enemy_image); //NB have to do this
+	background = al_clone_bitmap(data.background); //NB have to do this
 	bg_music = data.bg_music;
 	bgInstance = data.bgInstance;
 	laser_sound = data.laser_sound;
 	laser_sound_instance = data.laser_sound_instance;
-	cursorImage = data.cursorImage;
+	cursorImage = al_clone_bitmap(data.cursorImage);
 	cursor = data.cursor;
 	player = data.player;
+	//Mouse cursor
+	cursor = al_create_mouse_cursor(cursorImage, 16, 16);
+	al_set_mouse_cursor(display, cursor);
+	
 
 	//Checks
 	if (!timer)
@@ -199,22 +205,34 @@ int main(int argc, char **argv)
 
 			redraw = true;
 
+			//Updating
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 				(*iter)->Update();
 
+			////Colission Detection with Map elements
+			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
+			{
+				if ((*iter)->CheckCollision())
+					(*iter)->Collided();
+
+				//call colission routine
+			}
+
+			//Colission Detection with objects
 			for (std::list<GameObject*>::iterator iter1 = objects.begin(); iter1 != objects.end(); iter1++)
 			{
 				for (std::list<GameObject*>::iterator iter2 = objects.begin(); iter2 != objects.end(); iter2++)
 				{
-					bool collision = false;
-					if (iter1 != iter2)
-						collision = (*iter1)->CheckCollision(*iter2);
-					if (collision)
-						(*iter1)->Collided(*iter2);
+					if (iter1 != iter2) //Cant collide with yourself!
+					{
+						if ((*iter1)->CheckCollision(*iter2)) //Did you collide?
+							(*iter1)->Collided(*iter2); //Do something about it.
+					}					
 				}
 			}
 
 			EntityManager::getInstance().UpdateList();
+
 			//cameraUpdate(cameraPosition, player->get_x(), player->get_y(), player->get_width(), player->get_height());
 			//al_identity_transform(&camera);
 			//al_translate_transform(&camera, -cameraPosition[0], -cameraPosition[1]);
@@ -232,7 +250,7 @@ int main(int argc, char **argv)
 		{
 			if (rand() % 5 == 0) //Dont let too many spawn at a time;
 			{
-				Enemy *enemyPtr = new Enemy(rand() % 801, rand() % 601, 3, 3, 40, 56, 1, enemy_image);
+				Enemy *enemyPtr = new Enemy(rand() % 700 + 50, rand() % 500 +50, 3, 3, 56, 40, 1, enemy_image);
 				EntityManager::getInstance().AddEntity(enemyPtr);
 			}
 
@@ -243,28 +261,16 @@ int main(int argc, char **argv)
 		{
 			redraw = false;
 
-			//al_clear_to_color(al_map_rgb(0, 0, 0));
-			///using a bitmap as a background kills the framerate. Draw lines to see motion effect.
-			//for (int i = -100; i < 100; i++)
-			//	al_draw_line(i*75, -600, i*75, 1200, al_map_rgb(255, 0, 255), 2);
-			//al_draw_filled_rectangle(0, 0, 1200, 600, al_map_rgb(255, 0, 255));
-			//al_draw_bitmap(background, 0, 0, NULL);
-			//al_draw_bitmap(background, 1067, 0, NULL);
+			//al_draw_bitmap(background, 0, 0, 0);
+			MapDrawBG(20, 20, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
 
 			for (std::list<GameObject*>::iterator iter = objects.begin(); iter != objects.end(); iter++)
 				(*iter)->Draw();
 
 
 			al_draw_text(font_pirulen_24, al_map_rgb(255, 0, 0), SCREEN_WIDTH / 2, 10, ALLEGRO_ALIGN_CENTER, "IRON MAN vs. HULK");
-			al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), SCREEN_WIDTH/2 + cameraPosition[0] ,30, ALLEGRO_ALIGN_CENTER, "%i fps", gameFPS);
-			
-			if (player->getHealth() >= 0 && player->getHealth() <= 100)
-			{
-				//al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), SCREEN_WIDTH - 100, SCREEN_HEIGHT - 20, ALLEGRO_ALIGN_CENTER, "Health: %i", player->getHealth());
-				al_draw_rectangle(SCREEN_WIDTH - 116, SCREEN_HEIGHT - 20, SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10, al_map_rgba(255, 0, 0, 100), 2);
-				al_draw_filled_rectangle(SCREEN_WIDTH - 113, SCREEN_HEIGHT - 17, SCREEN_WIDTH - 113 + player->getHealth(), SCREEN_HEIGHT - 13, al_map_rgba(255, 0, 0,50));
-			}
-			
+			al_draw_textf(font_pirulen_18, al_map_rgb(255, 0, 0), SCREEN_WIDTH/2 + cameraPosition[0] ,30, ALLEGRO_ALIGN_CENTER, "%i fps", gameFPS);		
 			
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -291,6 +297,9 @@ int main(int argc, char **argv)
 	al_destroy_mouse_cursor(cursor);
 	al_destroy_sample_instance(laser_sound_instance);
 	al_destroy_sample(laser_sound);
+
+	//Unload map
+	MapFreeMem();
 
 	return 0;
 }
@@ -325,7 +334,6 @@ static void*loading_thread(ALLEGRO_THREAD*load, void*data)
 	//Set up cursor Image
 	Data->cursorImage = al_load_bitmap("target.png");
 	al_convert_mask_to_alpha(Data->cursorImage, al_map_rgb(255, 255, 255));
-	Data->cursor = al_create_mouse_cursor(Data->cursorImage, 16, 16);
 
 	//Load images
 	Data->player_image = al_load_bitmap("ironman.png");			//Player image
@@ -347,7 +355,7 @@ static void*loading_thread(ALLEGRO_THREAD*load, void*data)
 	//can set other properties here such as speed, gain, etc..
 	al_attach_sample_instance_to_mixer(Data->laser_sound_instance, al_get_default_mixer());
 
-	Data->player = new Player(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 5, 5, 32, 48, 1, Data->player_image, Data->laser_sound_instance);
+	Data->player = new Player(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 5, 5, 48, 32, 1, Data->player_image, Data->laser_sound_instance);
 	EntityManager::getInstance().AddEntity(Data->player);
 	Enemy::getPlayer(Data->player);
 
@@ -363,61 +371,14 @@ static void*loading_thread(ALLEGRO_THREAD*load, void*data)
 	al_register_event_source(Data->event_queue, al_get_mouse_event_source()); // mouse events
 	
 	//Create Enemies
-	Enemy *enemy1 = new Enemy(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 3, 3, 40, 56, 1, Data->enemy_image);
+	Enemy *enemy1 = new Enemy(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 3, 3, 56, 40, 1, Data->enemy_image);
 	EntityManager::getInstance().AddEntity(enemy1);
 
-	Enemy *enemy2 = new Enemy(3 * SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 3, 3, 40, 56, 1, Data->enemy_image);
+	Enemy *enemy2 = new Enemy(3 * SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2, 3, 3, 56, 40, 1, Data->enemy_image);
 	EntityManager::getInstance().AddEntity(enemy2);
 
 	al_rest(2.5);
-
-	//Load Map
-	Data->map = loadMap();
-	al_set_target_bitmap(al_get_backbuffer(Data->display));
-	//Mouse cursor
-	al_set_mouse_cursor(Data->display, Data->cursor);
-
 	Data->done_loading = true;
 
 	return NULL;
-}
-
-ALLEGRO_BITMAP * loadMap()
-{
-	int mapfile[40][30] = { { 0 } };
-	std::string temp;
-	std::stringstream tempRow;
-	std::ifstream inFile("map/map.dat");
-	ALLEGRO_BITMAP *tempBitmap;
-	ALLEGRO_BITMAP *map;
-
-	//Read mapfile into array
-	for (int i = 0; i < 30; i++)
-	{
-		std::getline(inFile, temp);
-		std::stringstream tempRow(temp);
-		for (int j = 0; j < 40; j++)
-		{
-			tempRow >> mapfile[j][i];
-		}
-	}
-
-	//Draw map
-	map = al_create_bitmap(SCREEN_WIDTH, SCREEN_HEIGHT);
-	al_set_target_bitmap(map);
-	al_clear_to_color(al_map_rgb(0, 0, 0));
-
-	for (int i = 0; i < 40; i++)
-	{
-		for (int j = 0; j < 30; j++)
-		{
-			tempRow.str("");
-			tempRow << "map/0" << mapfile[i][j] << ".png";
-			temp = tempRow.str();
-			tempBitmap = al_load_bitmap(temp.c_str());
-			al_draw_bitmap(tempBitmap, i * 20, j * 20, 0);
-			al_destroy_bitmap(tempBitmap);
-		}
-	}
-	return map;
 }
